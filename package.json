@@ -1,0 +1,22 @@
+{
+  "name": "cubes-2019-finotto",
+  "version": "1.0.0",
+  "description": "![Image from Minecraft](https://jordanweagly.files.wordpress.com/2012/02/figure_4.png)",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/interactive3dgraphicscourse-uniud-2019/cubes-2019-finotto.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/interactive3dgraphicscourse-uniud-2019/cubes-2019-finotto/issues"
+  },
+  "homepage": "https://github.com/interactive3dgraphicscourse-uniud-2019/cubes-2019-finotto#readme"
+}
