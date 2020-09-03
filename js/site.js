@@ -5,6 +5,8 @@ let heightMap;
 
 
 canvas.camera.position.z = 5;
+let light = new THREE.DirectionalLight( 0xffffff, 0.5 );
+canvas.scene.add(light);
 loadResources(loadTerrain);
 canvas.update = () => {
 
@@ -12,14 +14,24 @@ canvas.update = () => {
 canvas.renderLoop();
 
 function loadResources(callBack) {
+    // callback hell
     geo = new THREE.BoxGeometry(1, 1, 1);
-    let text = new THREE.TextureLoader().load(Resources.TextureGround(), (text) => {
-        mat = new THREE.MeshBasicMaterial({ map: text });
-        let text1 = new THREE.TextureLoader().load(Resources.TextureWater(), (text1) => {
-            matWater = new THREE.MeshBasicMaterial({ map: text1 });
-            callBack();
+    let albedo = new THREE.TextureLoader().load(Resources.TexturePaving(), (albedo) => {
+        let normal = new THREE.TextureLoader().load(Resources.TextureNormalPaving(), (normal) => {
+            let roughness = new THREE.TextureLoader().load(Resources.TextureRoughnessPaving(),(roughness)=>{
+                mat = new THREE.MeshPhysicalMaterial({ map: albedo,normalMap:normal,roughnessMap:roughness,metalness:0,reflectivity:0 });
+                let icealbedo = new THREE.TextureLoader().load(Resources.TextureIce(), (albedo) => {
+                    let icenormal = new THREE.TextureLoader().load(Resources.TextureNormalIce(), (normal) => {
+                        let iceroughness = new THREE.TextureLoader().load(Resources.TextureRoughnessIce(),(roughness)=>{
+                            matWater = new THREE.MeshPhysicalMaterial({ map: albedo,normalMap:normal,roughnessMap:roughness,metalness:0,reflectivity:1 });
+                            callBack();
+                        });
+                    });
+                });
+            });
         });
     });
+
 }
 
 function loadTerrain() {
