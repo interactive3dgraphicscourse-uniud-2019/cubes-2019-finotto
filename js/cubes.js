@@ -16,6 +16,7 @@ let geometry = new THREE.BoxGeometry(1,1,1);
 let mesh = new THREE.Mesh(geometry,sandMat);
 let mesh2 = new THREE.Mesh(geometry,waterMat);
 
+mesh.add(mesh2);
 mesh.castShadow = true;
 mesh.receiveShadow = true;
 mesh2.castShadow = true;
@@ -34,7 +35,7 @@ light.position.z = 5;
 light.position.y = 5;
 
 canvas.scene.add(mesh);
-canvas.scene.add(mesh2);
+//canvas.scene.add(mesh2); not add to scene or it become different object
 canvas.scene.add(light);
 
 light.shadow.mapSize.width = 512;  // default
@@ -45,7 +46,9 @@ light.shadow.camera.far = 500;     // default
 canvas.camera.position.z = 5;
 
 canvas.renderer.setClearColor(bgColor,1);
-
+let clock = new THREE.Clock(true);
 canvas.update=()=>{
+    mesh.position.y = Math.sin(clock.getElapsedTime());
+    mesh2.position.y = -Math.sin(clock.getElapsedTime()+Math.PI/2);
 }
 canvas.renderLoop();
