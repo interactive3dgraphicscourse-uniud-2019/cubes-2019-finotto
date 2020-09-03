@@ -65,7 +65,7 @@ function generateTerrain() {
     for (let i = 0, j = 0; i < imgData.data.length; i += 4) {
         let all = imgData.data[i] + imgData.data[i + 1] + imgData.data[i + 2];
         data[j++] = all;
-        if( Math.floor((3 * all) % 5)>0){
+        if( Math.floor((3 * all) % 10)>0){
 
             for (let y = 0; y < Math.floor((3 * all) % 5); y++) {
                 let mesh = new THREE.Mesh(geo, mat);
@@ -76,14 +76,14 @@ function generateTerrain() {
                 canvas.scene.add(mesh);
             }
         }else{
-            for (let y = 0; y < 3; y++) {
-                let mesh = new THREE.Mesh(geo, matWater);
-                let x = j % img.width;
-                console.log(all);
-                let z = j / img.width;
-                mesh.position.set(x, y, z);
-                canvas.scene.add(mesh);
-            }
+            // for (let y = 0; y < 3; y++) {
+            //     let mesh = new THREE.Mesh(geo, matWater);
+            //     let x = j % img.width;
+            //     console.log(all);
+            //     let z = j / img.width;
+            //     mesh.position.set(x, y, z);
+            //     canvas.scene.add(mesh);
+            // }
         }
     }
 

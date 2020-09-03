@@ -70,7 +70,7 @@ class CanvasHandler{
     }
     renderLoop(){
         requestAnimationFrame(this.renderLoop.bind(this));
-        this.update();
+        if(this.update){ this.update();}
         this.renderer.render(this.scene,this.camera);
     }
     resize(){
