@@ -5,9 +5,12 @@ let heightMap;
 
 
 canvas.camera.position.z = 5;
-let light = new THREE.DirectionalLight( 0xffffff, 0.5 );
+let light = new THREE.DirectionalLight( new THREE.Color(0.5,0.5,0.8), 0.5 );
 canvas.scene.add(light);
-loadResources(loadTerrain);
+loadCubeMap(
+    loadResources(loadTerrain)
+    );
+
 canvas.update = () => {
 
 }
@@ -31,9 +34,14 @@ function loadResources(callBack) {
             });
         });
     });
-
 }
-
+function loadCubeMap(callback){
+    new THREE.CubeTextureLoader().setPath(Resources.TextureBackground())
+    .load(['posx.jpg','negx.jpg','posy.jpg','negy.jpg','posz.jpg','negz.jpg'],(bgTexture)=>{
+        canvas.scene.background = bgTexture;
+        callback();
+    });
+}
 function loadTerrain() {
     heightMap = new Image();
     heightMap.src = Resources.HeightMap();

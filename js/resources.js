@@ -2,7 +2,9 @@
  * Define Resources path
  */
 class Resources{
+
     static HeightMap = ()=>'textures/heightmap2.png';
+    static TextureBackground = ()=>'textures/cubemaps/'
     static TextureGround = ()=>'textures/moss/moss-albedo.jpg';
     static TextureNormalGround = ()=>'textures/moss/moss-normals.jpg';
     static TextureRoughnessGround = ()=>'textures/moss/moss-roughness.jpg';
