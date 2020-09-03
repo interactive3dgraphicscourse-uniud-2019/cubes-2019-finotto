@@ -5,20 +5,20 @@ let heightMap;
 
 
 canvas.camera.position.z = 5;
-loadResources();
-loadTerrain();
+loadResources(loadTerrain);
 canvas.update = () => {
 
 }
 canvas.renderLoop();
 
-function loadResources() {
+function loadResources(callBack) {
     geo = new THREE.BoxGeometry(1, 1, 1);
     let text = new THREE.TextureLoader().load(Resources.TextureGround(), (text) => {
         mat = new THREE.MeshBasicMaterial({ map: text });
-    });
-    let text1 = new THREE.TextureLoader().load(Resources.TextureWater(), (text1) => {
-        matWater = new THREE.MeshBasicMaterial({ map: text1 });
+        let text1 = new THREE.TextureLoader().load(Resources.TextureWater(), (text1) => {
+            matWater = new THREE.MeshBasicMaterial({ map: text1 });
+            callBack();
+        });
     });
 }
 
