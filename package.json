@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/interactive3dgraphicscourse-uniud-2019/cubes-2019-finotto/issues"
   },
-  "homepage": "https://github.com/interactive3dgraphicscourse-uniud-2019/cubes-2019-finotto#readme"
+  "homepage": "https://github.com/interactive3dgraphicscourse-uniud-2019/cubes-2019-finotto#readme",
+  "dependencies": {
+    "three": "^0.120.1"
+  }
 }
