@@ -1,6 +1,4 @@
-/**
- * Init All
- */
+import {OrbitControls} from '../node_modules/three/build/three';
 
 let canvas = new CanvasHandler("body");
 let controls = new THREE.OrbitControls(canvas.camera, canvas.renderer.domElement);
