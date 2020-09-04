@@ -25,7 +25,7 @@ let light = new THREE.DirectionalLight(new THREE.Color("white"),0.8);
 /**
  * Materials
  */
-let earthMat = new THREE.MeshBasicMaterial({color:earthColor,opacity:1,transparent:true});
+let earthMat = new THREE.MeshBasicMaterial({color:earthColor,opacity:0.5,transparent:true});
 let moonMat = new THREE.MeshBasicMaterial({color:moonColor,transparent:true,opacity:1});
 let mercuryMat = new THREE.MeshBasicMaterial({color:mercuryColor});
 let venusMat = new THREE.MeshBasicMaterial({color:venusColor});
@@ -46,16 +46,16 @@ let moon = new Planet(10,0.5,moonMat);
 let heightMap = new Image();
 heightMap.src="textures/world.jpg";
 heightMap.onload=()=>{
-    sun.generateSurface(heightMap,0.2,sunMat2);
-    earth.generateSurface(heightMap,2,venusMat);
+    sun.generateSurface(heightMap,0.2,earthMat);
+    //earth.generateSurface(heightMap,2,venusMat);
 }
 
-let heightMap2 = new Image();
-heightMap2.src="textures/height2.jpg";
-heightMap2.onload=()=>{
-    sun.generateSurface(heightMap2,0.2,sunMat2);
-    //earth.generateWithHeightMap(heightMap,2,moonMat);
-}
+// let heightMap2 = new Image();
+// heightMap2.src="textures/height2.jpg";
+// heightMap2.onload=()=>{
+//     sun.generateSurface(heightMap2,0.2,sunMat2);
+//     //earth.generateWithHeightMap(heightMap,2,moonMat);
+// }
 sun.generate();
 mercury.generate();
 venus.generate();
@@ -125,8 +125,8 @@ let clock = new THREE.Clock(true);
  * Function of update of my scene
  */
 canvas.update=()=>{
-    controls.target = earth.planetObject.position;
-    //controls.target = sun.planetObject.position;
+    //controls.target = earth.planetObject.position;
+    controls.target = sun.planetObject.position;
      //  sun.surfaceObject.scale.set(Math.sin(clock.getElapsedTime())*0.1,Math.sin(clock.getElapsedTime()),Math.sin(clock.getElapsedTime()));
      //  mercuryController.position.z = Math.sin(clock.getElapsedTime()*5)*100;
      // mesh2.position.y = -Math.sin(clock.getElapsedTime()+Math.PI/2);

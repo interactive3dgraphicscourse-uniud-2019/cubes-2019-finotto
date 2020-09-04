@@ -5,7 +5,7 @@ export default class Planet {
      * @param {THREE.Material} material 
      * @param {number} size 
      */
-    constructor(size,scale, material) {
+    constructor(size, scale, material) {
         this.material = material;
         this.size = size;
         this.scale = scale;
@@ -19,62 +19,64 @@ export default class Planet {
      */
     generate() {
         let mat = this.material;
-        let geometry = new THREE.BoxGeometry(this.scale, this.scale, this.scale);
+        let cubes = new THREE.BoxBufferGeometry();
 
         for (let x = -this.size / 2; x < this.size / 2; x++) {
             for (let y = -this.size / 2; y < this.size / 2; y++) {
                 for (let z = -this.size / 2; z < this.size / 2; z++) {
                     if (Math.floor(new THREE.Vector3(x, y, z).length() + (this.size * 0.8)) <= this.size && (Math.floor(new THREE.Vector3(x, y, z).length() + (this.size * 0.8)) + 1) >= this.size) {
+                        let geometry = new THREE.BoxBufferGeometry(this.scale, this.scale, this.scale);
                         let mesh = new THREE.Mesh(geometry, mat);
-                        mesh.position.set(x*this.scale, y*this.scale, z*this.scale);
+                        mesh.position.set(x * this.scale, y * this.scale, z * this.scale);
                         this.planetObject.add(mesh);
-
+                        mesh.updateMatrix();
+                        mesh.geometry.applyMatrix4(mesh.matrix);
+                        cubes =THREE.BufferGeometryUtils.mergeBufferGeometries([cubes,mesh.geometry]);
                     }
                     continue;
                 }
             }
         }
+        this.planetObject = new THREE.Mesh(cubes,mat);
 
     }
-        /** 
-     * @param {ImageBitmapSource} heightMap;
-     * @param {number} weight;
-     * @param {THREE.Material} material2;
-     */
-    generateSurface(heightMap,weight,material2){
-        let mat = this.material;
-        let geometry = new THREE.BoxGeometry(this.scale, this.scale, this.scale);
+    /** 
+ * @param {ImageBitmapSource} heightMap;
+ * @param {number} weight;
+ * @param {THREE.Material} material2;
+ */
+    generateSurface(heightMap, weight, material2) {
+       
         let canvasContext = this.__getHeightMapData(heightMap)
         /**
-         * @type {THREE.Mesh}
+         * @type {THREE.Geometry}
          */
-        let cubes = [];
+        let cubes = new THREE.BoxBufferGeometry();
         for (let x = -this.size / 2; x <= this.size / 2; x++) {
             for (let y = -this.size / 2; y <= this.size / 2; y++) {
                 for (let z = -this.size / 2; z <= this.size / 2; z++) {
                     if (Math.floor(new THREE.Vector3(x, y, z).length() + (this.size * 0.8)) <= this.size && (Math.floor(new THREE.Vector3(x, y, z).length() + (this.size * 0.8)) + 1) >= this.size) {
-                    
-                        let u = (0.5- Math.atan2((z*2)/(this.size),(x*2)/(this.size))/Math.PI/2)*heightMap.width;
-                        let v = (0.5 - 2*Math.asin((y*2/(this.size)))/Math.PI/2)*heightMap.height;
- 
-                        let colorChannels = canvasContext.getImageData(u,v,1,1).data;
-                        let offset = Math.floor(((colorChannels[0]/255))*this.scale*weight);
+                        let geometry = new THREE.BoxBufferGeometry(this.scale, this.scale, this.scale);
+                        let u = (0.5 - Math.atan2((z * 2) / (this.size), (x * 2) / (this.size)) / Math.PI / 2) * heightMap.width;
+                        let v = (0.5 - 2 * Math.asin((y * 2 / (this.size))) / Math.PI / 2) * heightMap.height;
+
+                        let colorChannels = canvasContext.getImageData(u, v, 1, 1).data;
+                        let offset = Math.floor(((colorChannels[0] / 255)) * this.scale * weight);
 
                         let mesh;
                         let direction;
 
                         for (let i = 1; i <= offset; i++) {
-                            if(material2){
-                                mesh = new THREE.Mesh(geometry, material2);
-                            }else{
-                                mesh = new THREE.Mesh(geometry, mat);
-                            }
-                            let dir = new THREE.Vector3(x,y,z).normalize();
-                            dir = dir.multiplyScalar(i*this.scale);
+                            mesh = new THREE.Mesh(geometry, material2);
+                            let dir = new THREE.Vector3(x, y, z).normalize();
+                            dir = dir.multiplyScalar(i * this.scale);
                             direction = new THREE.Vector3((x), (y), (z)).add(dir);
-                            mesh.position.set(Math.floor(direction.x),Math.floor(direction.y),Math.floor(direction.z));
-                            this.surfaceObject.add(mesh);
-                            //cubes.push(mesh); 
+                            mesh.position.set(Math.floor(direction.x), Math.floor(direction.y), Math.floor(direction.z));
+                            //mesh.updateWorldMatrix();
+                            mesh.updateMatrix();
+                            mesh.geometry.applyMatrix4(mesh.matrix);
+                            cubes =THREE.BufferGeometryUtils.mergeBufferGeometries([cubes,mesh.geometry]);
+                            //cubes.mergeMesh(mesh);
                         }
                         //mesh.position.add(new THREE.Vector3(-offset/2,-offset/2,-offset/2));
                     }
@@ -82,6 +84,8 @@ export default class Planet {
                 }
             }
         }
+        this.surfaceObject = new THREE.Mesh(cubes, material2);
+        this.planetObject.add(this.surfaceObject);
         // let merged = THREE.BufferGeometryUtils.mergeBufferGeometries(cubes.map(x=>x.geometry));
         // this.surfaceObject.add(merged);
     }
@@ -90,11 +94,11 @@ export default class Planet {
      * @param {ImageBitmapSource} heightMap 
      * @returns {CanvasRenderingContext2D}
      */
-    __getHeightMapData(heightMap){
+    __getHeightMapData(heightMap) {
         let canvas = document.createElement('canvas');
         canvas.width = heightMap.width;
         canvas.height = heightMap.height;
-        canvas.getContext('2d').drawImage(heightMap,0,0,heightMap.width,heightMap.height);
+        canvas.getContext('2d').drawImage(heightMap, 0, 0, heightMap.width, heightMap.height);
         return canvas.getContext('2d');
     }
 
@@ -113,11 +117,11 @@ export default class Planet {
     //         for (let y = -this.size / 2; y <= this.size / 2; y++) {
     //             for (let z = -this.size / 2; z <= this.size / 2; z++) {
     //                 if (Math.floor(new THREE.Vector3(x, y, z).length() + (this.size * 0.8)) <= this.size && (Math.floor(new THREE.Vector3(x, y, z).length() + (this.size * 0.8)) + 1) >= this.size) {
-                        
+
     //                     // TODO fix this code
     //                     let u = (0.5- Math.atan2((z*2)/(this.size),(x*2)/(this.size))/Math.PI/2)*heightMap.width;
     //                     let v = (0.5 - 2*Math.asin((y*2/(this.size)))/Math.PI/2)*heightMap.height;
- 
+
     //                     let colorChannels = canvasContext.getImageData(u,v,1,1).data;
     //                     let offset = Math.floor(((colorChannels[0]/255))*this.scale*weight);
 
