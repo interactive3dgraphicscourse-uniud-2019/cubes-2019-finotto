@@ -15,6 +15,7 @@ let marsColor="#c25119";
 let venusColor="#a38e84";
 let mercuryColor="#cccccc";
 let sunColor="#c25119";
+let sunColor2="#cc0303";
 
 /**
  * Lights
@@ -30,6 +31,7 @@ let mercuryMat = new THREE.MeshBasicMaterial({color:mercuryColor});
 let venusMat = new THREE.MeshBasicMaterial({color:venusColor});
 let marsMat = new THREE.MeshBasicMaterial({color:marsColor});
 let sunMat = new THREE.MeshBasicMaterial({color:sunColor,transparent:false,opacity:0.8,wireframe:false});
+let sunMat2 = new THREE.MeshBasicMaterial({color:sunColor2,transparent:false,opacity:0.8,wireframe:false});
 
 /**
  * Planet creations
@@ -42,10 +44,10 @@ let earth = new Planet(20,1,earthMat);
 let moon = new Planet(20,0.1,moonMat);
 
 let heightMap = new Image();
-heightMap.src="textures/height1.jpg";
+heightMap.src="textures/world.jpg";
 heightMap.onload=()=>{
-    sun.generateWithHeightMap(heightMap,2,moonMat);
-    //earth.generateWithHeightMap(heightMap,3,moonMat);
+    sun.generateWithHeightMap(heightMap,0.2,sunMat2);
+    earth.generateWithHeightMap(heightMap,2,moonMat);
 }
 mercury.generate();
 venus.generate();
@@ -118,11 +120,11 @@ canvas.update=()=>{
     //controls.target = earth.planetObject.position;
     controls.target = sun.planetObject.position;
      //earth.planetObject.position.y = Math.sin(clock.getElapsedTime());
-    //  sun.planetObject.rotateY(0.005);
-    //  mercuryController.rotateY(0.05);
-    //  venusController.rotateY(0.01);
-    //  marsController.rotateY(0.005);
-    //  earthController.rotateY(0.001);
+     sun.planetObject.rotateY(0.005);
+     mercuryController.rotateY(0.05);
+     venusController.rotateY(0.01);
+     marsController.rotateY(0.005);
+     earthController.rotateY(0.001);
     // mesh2.position.y = -Math.sin(clock.getElapsedTime()+Math.PI/2);
 }
 
