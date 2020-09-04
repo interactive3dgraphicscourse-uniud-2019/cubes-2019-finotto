@@ -1,8 +1,13 @@
 
 import Planet from './planet.js';
+/**
+ * Basic setup
+ */
 let canvas = new CanvasHandler("body");
 let controls = new THREE.OrbitControls(canvas.camera, canvas.renderer.domElement);
-
+/**
+ * definitions of colors
+ */
 let bgColor = "#000000"; 
 let earthColor = "#5599cc";//"#ffb674";//"204,127,76"
     let moonColor ="#cccccc";//"#31aaf5";
@@ -11,7 +16,14 @@ let venusColor="#a38e84";
 let mercuryColor="#cccccc";
 let sunColor="#c25119";
 
+/**
+ * Lights
+ */
 let light = new THREE.DirectionalLight(new THREE.Color("white"),0.8);
+
+/**
+ * Materials
+ */
 let earthMat = new THREE.MeshBasicMaterial({color:earthColor,opacity:1,transparent:true});
 let moonMat = new THREE.MeshBasicMaterial({color:moonColor,transparent:true,opacity:1});
 let mercuryMat = new THREE.MeshBasicMaterial({color:mercuryColor});
@@ -19,14 +31,21 @@ let venusMat = new THREE.MeshBasicMaterial({color:venusColor});
 let marsMat = new THREE.MeshBasicMaterial({color:marsColor});
 let sunMat = new THREE.MeshBasicMaterial({color:sunColor,transparent:true,opacity:0.8});
 
-let sun = new Planet(20,50,sunMat);
+/**
+ * Planet creations
+ */
+let sun = new Planet(30,40,sunMat);
 let mercury = new Planet(10,1,mercuryMat);
 let venus = new Planet(12,1,venusMat);
 let mars = new Planet(16,1,marsMat);
 let earth = new Planet(20,1,earthMat);
 let moon = new Planet(20,0.1,moonMat);
 
-sun.generate();
+let heightMap = new Image();
+heightMap.src="textures/height1.jpg";
+heightMap.onload=()=>{
+    sun.generateWithHeightMap(heightMap,1);
+}
 mercury.generate();
 venus.generate();
 mars.generate();
@@ -40,6 +59,9 @@ mars.planetObject.position.set(0,0,650);
 earth.planetObject.position.set(0,0,900);
 moon.planetObject.position.set(0,0,10);
 
+/**
+ * planets controller for animations
+ */
 let mercuryController = new THREE.Object3D();
 mercuryController.add(mercury.planetObject);
 
@@ -52,6 +74,9 @@ marsController.add(mars.planetObject);
 let earthController = new THREE.Object3D();
 earthController.add(earth.planetObject);
 
+/**
+ * sceneGraph hierarchy
+ */
 earth.planetObject.add(moon.planetObject);
 sun.planetObject.add(mercuryController);
 sun.planetObject.add(venusController);

@@ -83,7 +83,7 @@
 			document.body.appendChild( stats.domElement );
 			
 			// uncomment if you need to draw coordinate axes when building the scene
-			//Coordinates.drawAllAxes();
+			Coordinates.drawAllAxes();
 			
 			controls = new THREE.OrbitControls( camera );
 			controls.addEventListener( 'change', Render );
@@ -93,7 +93,7 @@
 			img.onload = function () {
   
 				//get height data from img
-				var data = getHeightData(img,1000);
+				var data = getHeightData(img,0.1);
   
 				// load img source
 				img.src = "textures/heightmap2.png";
