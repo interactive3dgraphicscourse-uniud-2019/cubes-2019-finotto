@@ -46,9 +46,17 @@ let moon = new Planet(10,0.1,moonMat);
 let heightMap = new Image();
 heightMap.src="textures/world.jpg";
 heightMap.onload=()=>{
-    sun.generateWithHeightMap(heightMap,0.7,sunMat2);
+    sun.generateSurface(heightMap,0.9,sunMat2);
     //earth.generateWithHeightMap(heightMap,2,moonMat);
 }
+
+let heightMap2 = new Image();
+heightMap2.src="textures/height2.jpg";
+heightMap2.onload=()=>{
+    sun.generateSurface(heightMap2,0.6,moonMat);
+    //earth.generateWithHeightMap(heightMap,2,moonMat);
+}
+sun.generate();
 mercury.generate();
 venus.generate();
 mars.generate();
