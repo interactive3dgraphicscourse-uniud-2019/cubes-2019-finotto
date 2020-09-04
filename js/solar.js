@@ -56,10 +56,10 @@ earth.generate();
 moon.generate();
 
 sun.planetObject.position.set(0,0,0);
-mercury.planetObject.position.set(0,0,400);
-venus.planetObject.position.set(0,0,550);
-mars.planetObject.position.set(0,0,650);
-earth.planetObject.position.set(0,0,900);
+mercury.planetObject.position.set(0,0,600);
+venus.planetObject.position.set(0,0,750);
+mars.planetObject.position.set(0,0,850);
+earth.planetObject.position.set(0,0,1100);
 moon.planetObject.position.set(0,0,10);
 
 /**
@@ -118,10 +118,11 @@ let clock = new THREE.Clock(true);
  */
 canvas.update=()=>{
     //controls.target = earth.planetObject.position;
-    controls.target = sun.planetObject.position;
-     //earth.planetObject.position.y = Math.sin(clock.getElapsedTime());
+    controls.target = sun.planetObject.getWorldPosition();
+     //earth.planetObject.position.y =
      sun.planetObject.rotateY(0.005);
      mercuryController.rotateY(0.05);
+    //  mercuryController.position.z = Math.sin(clock.getElapsedTime()*5)*100;
      venusController.rotateY(0.01);
      marsController.rotateY(0.005);
      earthController.rotateY(0.001);
