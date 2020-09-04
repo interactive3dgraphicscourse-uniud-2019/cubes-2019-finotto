@@ -53,7 +53,7 @@ export default class Planet {
                         let v = (0.5 - 2*Math.asin((y*2/(this.size)))/Math.PI/2)*heightMap.height;
  
                         let colorChannels = canvasContext.getImageData(u,v,1,1).data;
-                        let offset = ((colorChannels[0]/255))*weight*this.scale;
+                        let offset = Math.floor(((colorChannels[0]/255))*this.scale*weight);
 
                         let mesh = new THREE.Mesh(geometry, mat);
                         let direction = new THREE.Vector3((x), (y), (z)).multiplyScalar(this.scale);
@@ -67,7 +67,7 @@ export default class Planet {
                                 mesh = new THREE.Mesh(geometry, mat);
                             }
                             //let mat2 = new THREE.MeshBasicMaterial({color:"red"});
-                            direction = new THREE.Vector3((x), (y), (z)).multiplyScalar(this.scale+i);
+                            direction = new THREE.Vector3((x), (y), (z)).multiplyScalar(this.size+i);
                             mesh.position.set(direction.x,direction.y,direction.z);
                             this.planetObject.add(mesh);
                         }

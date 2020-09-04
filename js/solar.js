@@ -40,19 +40,19 @@ let sun = new Planet(30,40,sunMat);
 let mercury = new Planet(10,1,mercuryMat);
 let venus = new Planet(12,1,venusMat);
 let mars = new Planet(16,1,marsMat);
-let earth = new Planet(20,1,earthMat);
-let moon = new Planet(20,0.1,moonMat);
+let earth = new Planet(30,1,earthMat);
+let moon = new Planet(10,0.1,moonMat);
 
 let heightMap = new Image();
 heightMap.src="textures/world.jpg";
 heightMap.onload=()=>{
-    sun.generateWithHeightMap(heightMap,0.2,sunMat2);
-    earth.generateWithHeightMap(heightMap,2,moonMat);
+    sun.generateWithHeightMap(heightMap,0.7,sunMat2);
+    //earth.generateWithHeightMap(heightMap,2,moonMat);
 }
 mercury.generate();
 venus.generate();
 mars.generate();
-//earth.generate();
+earth.generate();
 moon.generate();
 
 sun.planetObject.position.set(0,0,0);
