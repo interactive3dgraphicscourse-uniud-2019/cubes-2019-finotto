@@ -29,7 +29,7 @@ let moonMat = new THREE.MeshBasicMaterial({color:moonColor,transparent:true,opac
 let mercuryMat = new THREE.MeshBasicMaterial({color:mercuryColor});
 let venusMat = new THREE.MeshBasicMaterial({color:venusColor});
 let marsMat = new THREE.MeshBasicMaterial({color:marsColor});
-let sunMat = new THREE.MeshBasicMaterial({color:sunColor,transparent:true,opacity:0.8});
+let sunMat = new THREE.MeshBasicMaterial({color:sunColor,transparent:false,opacity:0.8,wireframe:false});
 
 /**
  * Planet creations
@@ -42,9 +42,10 @@ let earth = new Planet(20,1,earthMat);
 let moon = new Planet(20,0.1,moonMat);
 
 let heightMap = new Image();
-heightMap.src="textures/height1.jpg";
+heightMap.src="textures/heightmap2.png";
 heightMap.onload=()=>{
-    sun.generateWithHeightMap(heightMap,1);
+    sun.generateWithHeightMap(heightMap,10);
+    //earth.generateWithHeightMap(heightMap,20);
 }
 mercury.generate();
 venus.generate();
@@ -114,6 +115,8 @@ let clock = new THREE.Clock(true);
  * Function of update of my scene
  */
 canvas.update=()=>{
+    //controls.target = earth.planetObject.position;
+    controls.target = sun.planetObject.position;
      //earth.planetObject.position.y = Math.sin(clock.getElapsedTime());
      sun.planetObject.rotateY(0.005);
      mercuryController.rotateY(0.05);

@@ -53,13 +53,19 @@ export default class Planet {
                         let v = (0.5 - 2*Math.asin(-(y/(this.size*0.5)))/Math.PI/2)*heightMap.height;
                         console.log(u,v);
                         let colorChannels = canvasContext.getImageData(u,v,1,1).data;
-                        let offset = weight * (colorChannels[0]%255);
-                        console.log(offset);
+                        let offset = ((colorChannels[0]/255)-0.5)*weight*this.scale;
+                        console.log("OFFSET",offset);
                         let mesh = new THREE.Mesh(geometry, mat);
-                        
-                        mesh.position.set((x*this.scale)+offset, (y*this.scale)+offset, (z*this.scale)+offset);
-                        //mesh.position.add(new THREE.Vector3(-offset/2,-offset/2,-offset/2));
+                        let direction = new THREE.Vector3((x), (y), (z)).multiplyScalar(this.scale);
+                        mesh.position.set(direction.x,direction.y,direction.z);
                         this.planetObject.add(mesh);
+                        for (let i = 1; i < offset; i++) {
+                            mesh = new THREE.Mesh(geometry, mat);
+                            direction = new THREE.Vector3((x), (y), (z)).multiplyScalar(this.scale).addScalar(i);
+                            mesh.position.set(direction.x,direction.y,direction.z);
+                            this.planetObject.add(mesh);
+                        }
+                        //mesh.position.add(new THREE.Vector3(-offset/2,-offset/2,-offset/2));
                     }
                     continue;
                 }
