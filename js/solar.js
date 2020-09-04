@@ -42,15 +42,15 @@ let earth = new Planet(20,1,earthMat);
 let moon = new Planet(20,0.1,moonMat);
 
 let heightMap = new Image();
-heightMap.src="textures/heightmap2.png";
+heightMap.src="textures/height1.jpg";
 heightMap.onload=()=>{
-    sun.generateWithHeightMap(heightMap,10);
-    //earth.generateWithHeightMap(heightMap,20);
+    sun.generateWithHeightMap(heightMap,2,moonMat);
+    //earth.generateWithHeightMap(heightMap,3,moonMat);
 }
 mercury.generate();
 venus.generate();
 mars.generate();
-earth.generate();
+//earth.generate();
 moon.generate();
 
 sun.planetObject.position.set(0,0,0);
@@ -118,11 +118,11 @@ canvas.update=()=>{
     //controls.target = earth.planetObject.position;
     controls.target = sun.planetObject.position;
      //earth.planetObject.position.y = Math.sin(clock.getElapsedTime());
-     sun.planetObject.rotateY(0.005);
-     mercuryController.rotateY(0.05);
-     venusController.rotateY(0.01);
-     marsController.rotateY(0.005);
-     earthController.rotateY(0.001);
+    //  sun.planetObject.rotateY(0.005);
+    //  mercuryController.rotateY(0.05);
+    //  venusController.rotateY(0.01);
+    //  marsController.rotateY(0.005);
+    //  earthController.rotateY(0.001);
     // mesh2.position.y = -Math.sin(clock.getElapsedTime()+Math.PI/2);
 }
 
