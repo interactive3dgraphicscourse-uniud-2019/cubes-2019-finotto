@@ -7,7 +7,7 @@
 # tra i requisiti è richiesta la generazione del terreno, quindi ho usato la heightmap per generare la superficie del pianeta mappando la texture sulla sfera.
 # (miglioramenti) sarebbe utile separare la generazione del pianeta e della superficie del pianeta.
 # (miglioramenti) sfruttare il batch rendering per tutte le box con lo stesso materiale, almeno appartenenti allo stesso pianeta.
-
+# ci sono 2 metodi per migliorare le performance di rendering mergeGeometry e instancedMesh
 
 
 
