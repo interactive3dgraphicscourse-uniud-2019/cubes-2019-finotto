@@ -36,19 +36,19 @@ let sunMat2 = new THREE.MeshBasicMaterial({color:sunColor2,transparent:true,opac
 /**
  * Planet creations
  */
-let sun = new Planet(30,40,sunMat);
+let sun = new Planet(100,10,sunMat);
 let mercury = new Planet(10,1,mercuryMat);
 let venus = new Planet(12,1,venusMat);
 let mars = new Planet(16,1,marsMat);
 let earth = new Planet(30,1,earthMat);
 let moon = new Planet(10,0.5,moonMat);
 
-let heightMap = new Image();
-heightMap.src="textures/world.jpg";
-heightMap.onload=()=>{
-    sun.generateSurface(heightMap,0.2,earthMat);
-    //earth.generateSurface(heightMap,2,venusMat);
-}
+// let heightMap = new Image();
+// heightMap.src="textures/world.jpg";
+// heightMap.onload=()=>{
+//     sun.generateSurface(heightMap,0.2,earthMat);
+//     //earth.generateSurface(heightMap,2,venusMat);
+// }
 
 // let heightMap2 = new Image();
 // heightMap2.src="textures/height2.jpg";
@@ -56,43 +56,43 @@ heightMap.onload=()=>{
 //     sun.generateSurface(heightMap2,0.2,sunMat2);
 //     //earth.generateWithHeightMap(heightMap,2,moonMat);
 // }
-sun.generate();
-mercury.generate();
-venus.generate();
-mars.generate();
-earth.generate();
-moon.generate();
+sun.generatePlanet();
+// mercury.generate();
+// venus.generate();
+// mars.generate();
+// earth.generate();
+// moon.generate();
 
 sun.planetObject.position.set(0,0,0);
-mercury.planetObject.position.set(0,0,600);
-venus.planetObject.position.set(0,0,750);
-mars.planetObject.position.set(0,0,850);
-earth.planetObject.position.set(0,0,1100);
-moon.planetObject.position.set(0,0,100);
+// mercury.planetObject.position.set(0,0,600);
+// venus.planetObject.position.set(0,0,750);
+// mars.planetObject.position.set(0,0,850);
+// earth.planetObject.position.set(0,0,1100);
+// moon.planetObject.position.set(0,0,100);
 
 /**
  * planets controller for animations
  */
-let mercuryController = new THREE.Object3D();
-mercuryController.add(mercury.planetObject);
+// let mercuryController = new THREE.Object3D();
+// mercuryController.add(mercury.planetObject);
 
-let venusController = new THREE.Object3D();
-venusController.add(venus.planetObject);
+// let venusController = new THREE.Object3D();
+// venusController.add(venus.planetObject);
 
-let marsController = new THREE.Object3D();
-marsController.add(mars.planetObject);
+// let marsController = new THREE.Object3D();
+// marsController.add(mars.planetObject);
 
-let earthController = new THREE.Object3D();
-earthController.add(earth.planetObject);
+// let earthController = new THREE.Object3D();
+// earthController.add(earth.planetObject);
 
 /**
  * sceneGraph hierarchy
  */
-earth.planetObject.add(moon.planetObject);
-sun.planetObject.add(mercuryController);
-sun.planetObject.add(venusController);
-sun.planetObject.add(marsController);
-sun.planetObject.add(earthController);
+// earth.planetObject.add(moon.planetObject);
+// sun.planetObject.add(mercuryController);
+// sun.planetObject.add(venusController);
+// sun.planetObject.add(marsController);
+// sun.planetObject.add(earthController);
 
 
 canvas.renderer.shadowMap.enabled = true;
