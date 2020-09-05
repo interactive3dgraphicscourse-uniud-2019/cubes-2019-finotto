@@ -38,7 +38,7 @@ let sunMat2 = new THREE.MeshBasicMaterial({color:sunColor2,transparent:false,opa
  */
 let sun = new Planet(30,sunMat);
 let mercury = new Planet(10,mercuryMat);
-let venus = new Planet(12,venusMat);
+let venus = new Planet(13,venusMat);
 let mars = new Planet(15,marsMat);
 let earth = new Planet(16,earthMat);
 let moon = new Planet(5,moonMat);
@@ -47,15 +47,13 @@ let heightMap = new Image();
 heightMap.src="textures/world.jpg";
 heightMap.onload=()=>{
     sun.generatePlanetSurface(heightMap,4,sunMat2);
+    mercury.generatePlanetSurface(heightMap,4,venusMat);
+    venus.generatePlanetSurface(heightMap,4,earthMat);
+    mars.generatePlanetSurface(heightMap,4,venusMat);
     earth.generatePlanetSurface(heightMap,4,venusMat);
+    moon.generatePlanetSurface(heightMap,4,venusMat);
 }
 
-let heightMap2 = new Image();
-heightMap2.src="textures/height2.jpg";
-heightMap2.onload=()=>{
-    sun.generatePlanetSurface(heightMap2,0.2,sunMat2);
-    //earth.generateWithHeightMap(heightMap,2,moonMat);
-}
 sun.generatePlanet();
 mercury.generatePlanet();
 venus.generatePlanet();
@@ -65,10 +63,10 @@ moon.generatePlanet();
 
 sun.planetObject.position.set(0,0,0);
 mercury.planetObject.position.set(0,0,600);
-venus.planetObject.position.set(0,0,750);
-mars.planetObject.position.set(0,0,850);
-earth.planetObject.position.set(0,0,1100);
-moon.planetObject.position.set(0,0,100);
+venus.planetObject.position.set(0,0,1000);
+mars.planetObject.position.set(0,0,1500);
+earth.planetObject.position.set(0,0,2000);
+moon.planetObject.position.set(0,0,200);
 
 /**
  * planets controller for animations
@@ -114,7 +112,7 @@ light.shadow.mapSize.height = 512; // default
 light.shadow.camera.near = 0.5;    // default
 light.shadow.camera.far = 500;     // default
 
-canvas.camera.position.z = 1000;
+canvas.camera.position.z = 2000;
 
 canvas.renderer.setClearColor(bgColor,1);
 //getHeightMap();
@@ -126,20 +124,20 @@ let clock = new THREE.Clock(true);
  */
 canvas.update=()=>{
     //controls.target = earth.planetObject.position;
-    controls.target = sun.planetObject.position;
+    controls.target = venus.planetObject.position;
     let sin = Math.sin(clock.getElapsedTime());
     //sun.planetObject.scale.set(sin+1.5,sin+1.5,sin+1.5);
      //  sun.surfaceObject.scale.set(Math.sin(clock.getElapsedTime())*0.1,Math.sin(clock.getElapsedTime()),Math.sin(clock.getElapsedTime()));
      //  mercuryController.position.z = Math.sin(clock.getElapsedTime()*5)*100;
      // mesh2.position.y = -Math.sin(clock.getElapsedTime()+Math.PI/2);
 
-     sun.planetObject.rotateY(0.005);
-     sun.surfaceObject.rotateY(-0.002);
-     mercuryController.rotateY(0.05);
-     venusController.rotateY(0.01);
-     marsController.rotateY(0.005);
-     earthController.rotateY(0.001);
-     earth.planetObject.rotateY(0.07)
+    //  sun.planetObject.rotateY(0.005);
+    //  sun.surfaceObject.rotateY(-0.002);
+    //  mercuryController.rotateY(0.05);
+    //  venusController.rotateY(0.01);
+    //  marsController.rotateY(0.005);
+    //  earthController.rotateY(0.001);
+    //  earth.planetObject.rotateY(0.07)
 }
 
 canvas.renderLoop();
