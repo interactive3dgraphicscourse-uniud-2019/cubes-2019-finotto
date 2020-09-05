@@ -36,24 +36,24 @@ let sunMat2 = new THREE.MeshBasicMaterial({color:sunColor2,transparent:false,opa
 /**
  * Planet creations
  */
-let sun = new Planet(20,sunMat);
-let mercury = new Planet(5,mercuryMat);
-let venus = new Planet(6,venusMat);
-let mars = new Planet(7,marsMat);
-let earth = new Planet(10,earthMat);
-let moon = new Planet(1,moonMat);
+let sun = new Planet(30,sunMat);
+let mercury = new Planet(10,mercuryMat);
+let venus = new Planet(12,venusMat);
+let mars = new Planet(15,marsMat);
+let earth = new Planet(16,earthMat);
+let moon = new Planet(5,moonMat);
 
 let heightMap = new Image();
 heightMap.src="textures/world.jpg";
 heightMap.onload=()=>{
     sun.generatePlanetSurface(heightMap,4,sunMat2);
-    earth.generateSurface(heightMap,4,venusMat);
+    earth.generatePlanetSurface(heightMap,4,venusMat);
 }
 
 let heightMap2 = new Image();
 heightMap2.src="textures/height2.jpg";
 heightMap2.onload=()=>{
-    sun.generateSurface(heightMap2,0.2,sunMat2);
+    sun.generatePlanetSurface(heightMap2,0.2,sunMat2);
     //earth.generateWithHeightMap(heightMap,2,moonMat);
 }
 sun.generatePlanet();
@@ -139,7 +139,7 @@ canvas.update=()=>{
      venusController.rotateY(0.01);
      marsController.rotateY(0.005);
      earthController.rotateY(0.001);
-     earth.planetObject.rotateY(0.1)
+     earth.planetObject.rotateY(0.07)
 }
 
 canvas.renderLoop();

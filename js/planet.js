@@ -67,7 +67,7 @@ export default class Planet {
     /**
      * new one
      */
-    generatePlanet() {
+    async generatePlanet() {
         let mat = this.material;
         let cubes = new THREE.BoxBufferGeometry();
 
@@ -92,7 +92,7 @@ export default class Planet {
      * @param {number} weight max block
      * @param {*} material material of surface block
      */
-    generatePlanetSurface(heightMap, weight, material) {
+    async generatePlanetSurface(heightMap, weight, material) {
         //this.boxSize =8;
         let cubes = new THREE.BoxBufferGeometry();
         let canvasContext = this.__getHeightMapDataContext(heightMap);
