@@ -5,49 +5,23 @@ export default class Planet {
      * @param {THREE.Material} material 
      * @param {number} diameter 
      */
-    constructor(diameter, boxSize, material) {
+    constructor(diameter, material) {
         this.material = material;
         this.diameter = diameter;
-        this.boxSize = boxSize;
+        this.boxSize = diameter / 10;
         this.planetObject = new THREE.Object3D();
         this.surfaceObject = new THREE.Object3D();
         this.planetObject.add(this.surfaceObject);
     }
-    /**
-     * 
-     * @param {THREE.Scene} scene 
-     */
-    generate() {
-        let mat = this.material;
-        let cubes = new THREE.BoxBufferGeometry();
 
-        for (let x = -this.diameter / 2; x < this.diameter / 2; x++) {
-            for (let y = -this.diameter / 2; y < this.diameter / 2; y++) {
-                for (let z = -this.diameter / 2; z < this.diameter / 2; z++) {
-                    if (Math.floor(new THREE.Vector3(x, y, z).length() + (this.diameter * 0.8)) <= this.diameter && (Math.floor(new THREE.Vector3(x, y, z).length() + (this.diameter * 0.8)) + 1) >= this.diameter) {
-                        let geometry = new THREE.BoxBufferGeometry(this.boxSize, this.boxSize, this.boxSize);
-                        let mesh = new THREE.Mesh(geometry, mat);
-                        mesh.position.set(x * this.boxSize, y * this.boxSize, z * this.boxSize);
-                        this.planetObject.add(mesh);
-                        mesh.updateMatrix();
-                        mesh.geometry.applyMatrix4(mesh.matrix);
-                        cubes =THREE.BufferGeometryUtils.mergeBufferGeometries([cubes,mesh.geometry]);
-                    }
-                    continue;
-                }
-            }
-        }
-        this.planetObject = new THREE.Mesh(cubes,mat);
-
-    }
     /** 
  * @param {ImageBitmapSource} heightMap;
  * @param {number} weight;
  * @param {THREE.Material} material2;
  */
     generateSurface(heightMap, weight, material2) {
-       
-        let canvasContext = this.__getHeightMapData(heightMap)
+
+        let canvasContext = this.__getHeightMapDataContext(heightMap)
         /**
          * @type {THREE.Geometry}
          */
@@ -75,7 +49,7 @@ export default class Planet {
                             //mesh.updateWorldMatrix();
                             mesh.updateMatrix();
                             mesh.geometry.applyMatrix4(mesh.matrix);
-                            cubes =THREE.BufferGeometryUtils.mergeBufferGeometries([cubes,mesh.geometry]);
+                            cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, mesh.geometry]);
                             //cubes.mergeMesh(mesh);
                         }
                         //mesh.position.add(new THREE.Vector3(-offset/2,-offset/2,-offset/2));
@@ -90,37 +64,83 @@ export default class Planet {
         // this.surfaceObject.add(merged);
     }
 
+    /**
+     * new one
+     */
     generatePlanet() {
         let mat = this.material;
         let cubes = new THREE.BoxBufferGeometry();
 
-        for (let x =-this.diameter/2 ; x <= this.diameter/2 ; x+=this.boxSize/2) {
-            for (let y =-this.diameter/2 ; y <= this.diameter/2 ; y+=this.boxSize/2) {
-                for (let z =-this.diameter/2 ; z <= this.diameter/2 ; z+=this.boxSize/2) {
-                    let pos = new THREE.Vector3(x,y,z);
-                    if(pos.length()>(this.diameter/2)*0.72&& (pos.length()+this.boxSize*0.8)<(this.diameter/2) ){
-                        pos = this.__nearestSpawnPosition(pos,this.boxSize/2);
-                        let newBox = this.__generateBoxAtPosition(pos,this.boxSize*1.5);
-                        cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes,newBox]);
+        for (let x = -this.diameter / 2; x <= this.diameter / 2; x += this.boxSize / 2) {
+            for (let y = -this.diameter / 2; y <= this.diameter / 2; y += this.boxSize / 2) {
+                for (let z = -this.diameter / 2; z <= this.diameter / 2; z += this.boxSize / 2) {
+                    let pos = new THREE.Vector3(x, y, z);
+                    if (pos.length() > (this.diameter / 2) * 0.72 && (pos.length() + this.boxSize * 0.8) < (this.diameter / 2)) {
+                        pos = this.__nearestSpawnPosition(pos, this.boxSize / 2);
+                        let newBox = this.__generateBoxAtPosition(pos, this.boxSize * 1.5);
+                        cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, newBox]);
                     }
                 }
-            }                
+            }
         }
 
-        this.planetObject.add(new THREE.Mesh(cubes,this.material));
+        this.planetObject.add(new THREE.Mesh(cubes, this.material));
+    }
+    /**
+     * 
+     * @param {ImageBitmapSource} heightMap 
+     * @param {number} weight max block
+     * @param {*} material material of surface block
+     */
+    generatePlanetSurface(heightMap, weight, material) {
+        let cubes = new THREE.BoxBufferGeometry();
+        let canvasContext = this.__getHeightMapDataContext(heightMap);
+        for (let x = -this.diameter / 2; x <= this.diameter / 2; x += this.boxSize / 2) {
+            for (let y = -this.diameter / 2; y <= this.diameter / 2; y += this.boxSize / 2) {
+                for (let z = -this.diameter / 2; z <= this.diameter / 2; z += this.boxSize / 2) {
+                    let pos = new THREE.Vector3(x, y, z);
+                    if (pos.length() > (this.diameter / 2) * 0.72 && (pos.length() + this.boxSize * 0.8) < (this.diameter / 2)) {
+
+                        let uvCoord = this.__mapSphereCoordToMap(pos).multiply(new THREE.Vector2(heightMap.width, heightMap.height));
+                        let colorChannels = canvasContext.getImageData(uvCoord.x, uvCoord.y, 1, 1).data;
+                        let offset = Math.floor((colorChannels[0] / 255) * weight); // range 0-> weight
+
+                        for (let i = 0; i < offset; i++) {
+                            pos.setLength((this.diameter / 2) + (i*this.boxSize));
+                            pos = this.__nearestSpawnPosition(pos, this.boxSize / 2);
+                            let newBox = this.__generateBoxAtPosition(pos, this.boxSize * 1.5);
+                            cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, newBox]);
+                        }
+                    }
+                }
+            }
+        }
+        this.surfaceObject.add(new THREE.Mesh(cubes, material));
+        this.planetObject.add(this.surfaceObject);
     }
 
+    /**
+     * 
+     * @param {THREE.Vector3} surfacePoint direction to surface of the sphere
+     * @returns {THREE.Vector2} (uv) coords on texture; 
+     */
+    __mapSphereCoordToMap(surfacePoint) {
+        let direction = surfacePoint.normalize();
+        let u = (0.5 - (Math.atan2((direction.z), (direction.x)) / (Math.PI * 2)));
+        let v = (0.5 - 2 * Math.asin((direction.y)) / (Math.PI * 2));
+        return new THREE.Vector2(u, v);
+    }
     /**
      * 
      * @param {THREE.Vector3} position 
      * @param {number} size 
      * @returns {THREE.Vector3} nearest spawn position
      */
-    __nearestSpawnPosition(position,size){
-        let posX = (Math.floor(position.x/size))*size+(0.5*size);
-        let posY = (Math.floor(position.y/size))*size+(0.5*size);
-        let posZ = (Math.floor(position.z/size))*size+(0.5*size);
-        return new THREE.Vector3(posX,posY,posZ);
+    __nearestSpawnPosition(position, size) {
+        let posX = (Math.floor(position.x / size)) * size + (0.5 * size);
+        let posY = (Math.floor(position.y / size)) * size + (0.5 * size);
+        let posZ = (Math.floor(position.z / size)) * size + (0.5 * size);
+        return new THREE.Vector3(posX, posY, posZ);
     }
 
 
@@ -130,12 +150,12 @@ export default class Planet {
      * @param {number} boxSize 
      * @returns {THREE.BufferGeometry}
      */
-    __generateBoxAtPosition(position,boxSize){
-        let box  = new THREE.BoxBufferGeometry(boxSize,boxSize,boxSize);
+    __generateBoxAtPosition(position, boxSize) {
+        let box = new THREE.BoxBufferGeometry(boxSize, boxSize, boxSize);
         let mesh = new THREE.Mesh(box);
 
-        mesh.scale.set(boxSize,boxSize,boxSize);
-        mesh.translateOnAxis(position,position.length());
+        mesh.scale.set(boxSize, boxSize, boxSize);
+        mesh.translateOnAxis(position, position.length());
 
         mesh.updateMatrixWorld();
         mesh.geometry.applyMatrix4(mesh.matrixWorld);
@@ -147,7 +167,7 @@ export default class Planet {
      * @param {ImageBitmapSource} heightMap 
      * @returns {CanvasRenderingContext2D}
      */
-    __getHeightMapData(heightMap) {
+    __getHeightMapDataContext(heightMap) {
         let canvas = document.createElement('canvas');
         canvas.width = heightMap.width;
         canvas.height = heightMap.height;
@@ -155,7 +175,33 @@ export default class Planet {
         return canvas.getContext('2d');
     }
 
+    // /**
+    //  * 
+    //  * @param {THREE.Scene} scene 
+    //  */
+    // generate() {
+    //     let mat = this.material;
+    //     let cubes = new THREE.BoxBufferGeometry();
 
+    //     for (let x = -this.diameter / 2; x < this.diameter / 2; x++) {
+    //         for (let y = -this.diameter / 2; y < this.diameter / 2; y++) {
+    //             for (let z = -this.diameter / 2; z < this.diameter / 2; z++) {
+    //                 if (Math.floor(new THREE.Vector3(x, y, z).length() + (this.diameter * 0.8)) <= this.diameter && (Math.floor(new THREE.Vector3(x, y, z).length() + (this.diameter * 0.8)) + 1) >= this.diameter) {
+    //                     let geometry = new THREE.BoxBufferGeometry(this.boxSize, this.boxSize, this.boxSize);
+    //                     let mesh = new THREE.Mesh(geometry, mat);
+    //                     mesh.position.set(x * this.boxSize, y * this.boxSize, z * this.boxSize);
+    //                     this.planetObject.add(mesh);
+    //                     mesh.updateMatrix();
+    //                     mesh.geometry.applyMatrix4(mesh.matrix);
+    //                     cubes =THREE.BufferGeometryUtils.mergeBufferGeometries([cubes,mesh.geometry]);
+    //                 }
+    //                 continue;
+    //             }
+    //         }
+    //     }
+    //     this.planetObject = new THREE.Mesh(cubes,mat);
+
+    // }
     //  obsolete 
     // /**  
     //  * @param {ImageBitmapSource} heightMap;
