@@ -8,7 +8,7 @@ let controls = new THREE.OrbitControls(canvas.camera, canvas.renderer.domElement
 /**
  * definitions of colors
  */
-let bgColor = "#000000"; 
+let bgColor = "#000000";
 let earthColor = "#5599cc";//"#ffb674";//"204,127,76"
     let moonColor ="#cccccc";//"#31aaf5";
 let marsColor="#c25119";
@@ -36,17 +36,17 @@ let sunMat2 = new THREE.MeshBasicMaterial({color:sunColor2,transparent:true,opac
 /**
  * Planet creations
  */
-let sun = new Planet(40,sunMat);
-let mercury = new Planet(10,1,mercuryMat);
-let venus = new Planet(12,1,venusMat);
-let mars = new Planet(16,1,marsMat);
-let earth = new Planet(30,1,earthMat);
-let moon = new Planet(10,0.5,moonMat);
+let sun = new Planet(50,sunMat);
+// let mercury = new Planet(10,1,mercuryMat);
+// let venus = new Planet(12,1,venusMat);
+// let mars = new Planet(16,1,marsMat);
+// let earth = new Planet(30,1,earthMat);
+// let moon = new Planet(10,0.5,moonMat);
 
 let heightMap = new Image();
-heightMap.src="textures/world.jpg";
+heightMap.src="textures/height1.jpg";
 heightMap.onload=()=>{
-    sun.generatePlanetSurface(heightMap,5,earthMat);
+    sun.generatePlanetSurface(heightMap,4,earthMat);
     //earth.generateSurface(heightMap,2,venusMat);
 }
 
@@ -99,7 +99,7 @@ canvas.renderer.shadowMap.enabled = true;
 canvas.renderer.shadowMap.type = THREE.PCFShadowMap;
 
 
-light.target = earth.planetObject;
+// light.target = earth.planetObject;
 light.castShadow = true;
 
 light.position.z = 5;
