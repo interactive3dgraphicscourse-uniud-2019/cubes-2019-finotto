@@ -93,24 +93,20 @@ export default class Planet {
     generatePlanet() {
         let mat = this.material;
         let cubes = new THREE.BoxBufferGeometry();
-        console.log("GENERATE PLANET")
-        for (let x = -Math.PI ; x < Math.PI ; x += 1) {
-            for (let z = -Math.PI; z <= Math.PI; z += 1) {
-                for (let y = -Math.PI; y <= Math.PI; y += 1) {
-                    let pos = new THREE.Vector3(x*this.boxSize,y*this.boxSize,z*this.boxSize);
-                    console.log("POS",this.boxSize);                    
-                    console.log("POS",pos);
-                    if(pos.length()>(this.diameter/2)*0.5 && (pos.length()+this.boxSize/2)<(this.diameter/2)*0.9 ){
-                        pos = this.__nearestSpawnPosition(pos,this.boxSize);
-                        console.log("POS2",pos);
-                        let newBox = this.__generateBoxAtPosition(pos,this.boxSize);
+
+        for (let x =-this.diameter/2 ; x <= this.diameter/2 ; x+=this.boxSize/2) {
+            for (let y =-this.diameter/2 ; y <= this.diameter/2 ; y+=this.boxSize/2) {
+                for (let z =-this.diameter/2 ; z <= this.diameter/2 ; z+=this.boxSize/2) {
+                    let pos = new THREE.Vector3(x,y,z);
+                    if(pos.length()>(this.diameter/2)*0.72&& (pos.length()+this.boxSize*0.8)<(this.diameter/2) ){
+                        pos = this.__nearestSpawnPosition(pos,this.boxSize/2);
+                        let newBox = this.__generateBoxAtPosition(pos,this.boxSize*1.5);
                         cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes,newBox]);
                     }
-                    
                 }
             }                
         }
-        console.log("END GENERATE PLANET")
+
         this.planetObject.add(new THREE.Mesh(cubes,this.material));
     }
 

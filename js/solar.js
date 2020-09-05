@@ -36,7 +36,7 @@ let sunMat2 = new THREE.MeshBasicMaterial({color:sunColor2,transparent:true,opac
 /**
  * Planet creations
  */
-let sun = new Planet(100,10,sunMat);
+let sun = new Planet(50,4.5,sunMat);
 let mercury = new Planet(10,1,mercuryMat);
 let venus = new Planet(12,1,venusMat);
 let mars = new Planet(16,1,marsMat);
