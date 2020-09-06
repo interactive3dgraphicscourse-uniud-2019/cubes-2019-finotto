@@ -70,12 +70,12 @@ export default class Planet {
     async generatePlanet() {
         let mat = this.material;
         let cubes;
-        let tempCubes=[];
+        let tempCubes = [];
         for (let x = -this.diameter / 2; x <= this.diameter / 2; x += this.boxSize / 2) {
             for (let y = -this.diameter / 2; y <= this.diameter / 2; y += this.boxSize / 2) {
                 for (let z = -this.diameter / 2; z <= this.diameter / 2; z += this.boxSize / 2) {
                     let pos = new THREE.Vector3(x, y, z);
-                    if (pos.length() > (this.diameter/2 )-this.boxSize/2 && pos.length() < (this.diameter/2 )+this.boxSize/2) {
+                    if (pos.length() > (this.diameter / 2) - this.boxSize / 2 && pos.length() < (this.diameter / 2) + this.boxSize / 2) {
                         pos = this.__nearestSpawnPosition(pos, this.boxSize / 2);
                         let newBox = this.__generateBoxAtPosition(pos, this.boxSize * 1.5);
                         tempCubes.push(newBox);
@@ -95,13 +95,13 @@ export default class Planet {
     async generatePlanetSurface(heightMap, weight, material) {
         //this.boxSize =8;
         let cubes;
-        let tempCubes=[];
+        let tempCubes = [];
         let canvasContext = this.__getHeightMapDataContext(heightMap);
         for (let x = -this.diameter / 2; x <= this.diameter / 2; x += this.boxSize / 2) {
             for (let y = -this.diameter / 2; y <= this.diameter / 2; y += this.boxSize / 2) {
                 for (let z = -this.diameter / 2; z <= this.diameter / 2; z += this.boxSize / 2) {
                     let pos = new THREE.Vector3(x, y, z);
-                    if (pos.length() > (this.diameter/2 )-this.boxSize/2 && pos.length() < (this.diameter/2 )+this.boxSize/2) {
+                    if (pos.length() > (this.diameter / 2) - this.boxSize / 2 && pos.length() < (this.diameter / 2) + this.boxSize / 2) {
 
                         let uvCoord = this.__mapSphereCoordToMap(pos).multiply(new THREE.Vector2(heightMap.width, heightMap.height));
                         let colorChannels = canvasContext.getImageData(uvCoord.x, uvCoord.y, 1, 1).data;
@@ -113,12 +113,15 @@ export default class Planet {
                         //     //cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, newBox]);
                         //     tempCubes.push(newBox);
                         // }
-                        for (const point of this.__getFrustumCoords(pos,this.diameter/2,this.diameter/2+offset,75,this.boxSize)) {
-                            let newBox = this.__generateBoxAtPosition(point, this.boxSize*1.5);
-                            tempCubes.push(newBox);
-                            //cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, newBox]);
+                        if(offset>0){
+                            for (const point of this.__getFrustumCoords(pos, this.diameter / 2, (this.diameter / 2) + offset, 75, this.boxSize)) {
+                                let newBox = this.__generateBoxAtPosition(point, this.boxSize * 1.5);
+                                tempCubes.push(newBox);
+                                //cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, newBox]);
+                            }
                         }
-                        
+
+
                     }
                 }
             }
@@ -137,23 +140,30 @@ export default class Planet {
      * @param {number} fov blockSize
      * @returns {THREE.Vector3[]} 
      */
-    __getFrustumCoords(direction,min,max,fov,blockSize) {
-        let vDir = new THREE.Vector3(direction.x,direction.y,direction.z).normalize();
-        let vMin = new THREE.Vector3(vDir.x,vDir.y,vDir.z).multiplyScalar(min);
+    __getFrustumCoords(direction, min, max, fov, blockSize) {
+        let vDir = new THREE.Vector3(direction.x, direction.y, direction.z).normalize();
+        let vMin = new THREE.Vector3(vDir.x, vDir.y, vDir.z).multiplyScalar(min);
         let vMax = vDir.multiplyScalar(max);
-
-        // min splane
-        let vBTL = vMin.applyAxisAngle(new THREE.Vector3(-1,1,0),fov);
-        let vBTR = vMin.applyAxisAngle(new THREE.Vector3(1,1,0),fov);
-        let vBBR = vMin.applyAxisAngle(new THREE.Vector3(1,-1,0),fov);
-        let vBBL = vMin.applyAxisAngle(new THREE.Vector3(-1,-1,0),fov);
-        // max plane
-        let vFTL = vMax.applyAxisAngle(new THREE.Vector3(-1,1,0),fov);
-        let vFTR = vMax.applyAxisAngle(new THREE.Vector3(1,1,0),fov);
-        let vFBR = vMax.applyAxisAngle(new THREE.Vector3(1,-1,0),fov);
-        let vFBL = vMax.applyAxisAngle(new THREE.Vector3(-1,-1,0),fov);
-
-        return [vBTL,vBTR,vBBR,vBBL,vFTL,vFTR,vFBR,vFBL];
+        let delta = (max - min) / blockSize;
+        // // min splane
+        // let vBTL = vMin.applyAxisAngle(new THREE.Vector3(-1, 1, 0), fov);
+        // let vBTR = vMin.applyAxisAngle(new THREE.Vector3(1, 1, 0), fov);
+        // let vBBR = vMin.applyAxisAngle(new THREE.Vector3(1, -1, 0), fov);
+        // let vBBL = vMin.applyAxisAngle(new THREE.Vector3(-1, -1, 0), fov);
+        // // max plane
+        // let vFTL = vMax.applyAxisAngle(new THREE.Vector3(-1, 1, 0), fov);
+        // let vFTR = vMax.applyAxisAngle(new THREE.Vector3(1, 1, 0), fov);
+        // let vFBR = vMax.applyAxisAngle(new THREE.Vector3(1, -1, 0), fov);
+        // let vFBL = vMax.applyAxisAngle(new THREE.Vector3(-1, -1, 0), fov);
+        let row = [];
+        for (let i = 1; i <= delta; i++) {
+            let step = new THREE.Vector3(vMin.x, vMin.y, vMin.z).normalize();
+            step.multiplyScalar(blockSize * i);
+            step = vMin.add(step);
+            step = this.__nearestSpawnPosition(step,blockSize);
+            row.push(step);
+        }
+        return [...row,vMax];//,vBTL,vBTR,vBBR,vBBL,vFTL,vFTR,vFBR,vFBL
     }
     /**
      * 

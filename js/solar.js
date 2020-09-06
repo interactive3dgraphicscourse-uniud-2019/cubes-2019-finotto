@@ -142,7 +142,7 @@ let clock = new THREE.Clock(true);
  */
 canvas.update=()=>{
     //controls.target = earth.planetObject.position;
-    controls.target = earth.planetObject.position;
+    controls.target = sun.planetObject.position;
     let sin = Math.sin(clock.getElapsedTime());
     //sun.planetObject.scale.set(sin+1.5,sin+1.5,sin+1.5);
      //  sun.surfaceObject.scale.set(Math.sin(clock.getElapsedTime())*0.1,Math.sin(clock.getElapsedTime()),Math.sin(clock.getElapsedTime()));
