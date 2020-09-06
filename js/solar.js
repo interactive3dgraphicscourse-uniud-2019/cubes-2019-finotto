@@ -29,7 +29,7 @@ let targetSurface = {
         this.__weight=value;
         target.planetObject.remove(target.surfaceObject);
         target.surfaceObject = new THREE.Object3D(); 
-        target.generatePlanetSurface(heightMap,value,target.surfaceMaterial);
+        target.generatePlanetSurface(target.heightMap,value,target.surfaceMaterial);
     },
     get weight(){
         return this.__weight; 
@@ -76,32 +76,33 @@ let sunMat2 = new THREE.MeshBasicMaterial({color:sunColor2,transparent:false,opa
  * Planet creations
  */
 let sun = new Planet(50,sunMat,5,sunMat2);
-let mercury = new Planet(10,mercuryMat,2.5,venusMat);
+let mercury = new Planet(10,mercuryMat,3,venusMat);
 let venus = new Planet(13,venusMat,3,earthMat);
-let mars = new Planet(15,marsMat,3.5,venusMat);
-let earth = new Planet(16,earthMat,4,venusMat);
-let moon = new Planet(5,moonMat,1.5,venusMat);
+let mars = new Planet(15,marsMat,3,venusMat);
+let earth = new Planet(16,earthMat,3,venusMat);
+let moon = new Planet(5,moonMat,2,venusMat);
 
 let heightMap = new Image();
-heightMap.src="textures/world.jpg";
+heightMap.src="textures/world2.jpg";
 heightMap.onload=()=>{
+    sun.heightMap = heightMap;
     sun.generatePlanetSurface(heightMap,3,sunMat2);
-    mercury.generatePlanetSurface(heightMap,2,venusMat);
-    venus.generatePlanetSurface(heightMap,2,earthMat);
-    mars.generatePlanetSurface(heightMap,2,venusMat);
-    earth.generatePlanetSurface(heightMap,2,venusMat);
-    moon.generatePlanetSurface(heightMap,2,venusMat);
+
 }
-// let heightMap2 = new Image();
-// heightMap2.src="textures/height2.jpg";
-// heightMap2.onload=()=>{
-//     sun.generatePlanetSurface(heightMap,2,sunMat2);
-//     // mercury.generatePlanetSurface(heightMap,4,venusMat);
-//     // venus.generatePlanetSurface(heightMap,4,earthMat);
-//     // mars.generatePlanetSurface(heightMap,4,venusMat);
-//     // earth.generatePlanetSurface(heightMap,4,venusMat);
-//     // moon.generatePlanetSurface(heightMap,4,venusMat);
-// }
+let heightMap2 = new Image();
+heightMap2.src="textures/world.jpg";
+heightMap2.onload=()=>{
+    mercury.heightMap = heightMap2;
+    mercury.generatePlanetSurface(heightMap2,2,venusMat);
+    venus.heightMap = heightMap2;
+    venus.generatePlanetSurface(heightMap2,2,earthMat);
+    mars.heightMap = heightMap2;
+    mars.generatePlanetSurface(heightMap2,2,venusMat);
+    earth.heightMap = heightMap2;
+    earth.generatePlanetSurface(heightMap2,2,venusMat);
+    moon.heightMap = heightMap2;
+    moon.generatePlanetSurface(heightMap2,2,venusMat);
+}
 
 
 

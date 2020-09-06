@@ -9,6 +9,7 @@ export default class Planet {
         this.material = material;
         this.diameter = diameter;
         this.surfaceMaterial=surfaceMaterial;
+        this.heightMap;
         if(boxSize){
             this.boxSize = boxSize;
         }else{
