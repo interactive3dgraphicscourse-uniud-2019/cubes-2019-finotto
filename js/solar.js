@@ -5,6 +5,7 @@ import Planet from './planet.js';
  */
 let canvas = new CanvasHandler("body");
 let controls = new THREE.OrbitControls(canvas.camera, canvas.renderer.domElement);
+
 /**
  * definitions of colors
  */
@@ -64,12 +65,16 @@ heightMap2.onload=()=>{
     // moon.generatePlanetSurface(heightMap,4,venusMat);
 }
 
+
+
 sun.generatePlanet();
 mercury.generatePlanet();
 venus.generatePlanet();
 mars.generatePlanet();
 earth.generatePlanet();
 moon.generatePlanet();
+
+
 
 sun.planetObject.position.set(0,0,0);
 mercury.planetObject.position.set(0,0,1000);
@@ -125,9 +130,10 @@ light.shadow.camera.far = 500;     // default
 canvas.camera.position.z = 6000;
 
 canvas.renderer.setClearColor(bgColor,1);
+
 canvas.scene.background = new THREE.CubeTextureLoader().setPath("textures/cubemaps/")
                 .load(['box.jpg','box.jpg','box.jpg','box.jpg','box.jpg','box.jpg']);
-//getHeightMap();
+
 
 let clock = new THREE.Clock(true);
 
@@ -153,9 +159,3 @@ canvas.update=()=>{
 }
 
 canvas.renderLoop();
-
-function getHeightMap(img,scale){
-    if(!img || ! scale){
-        throw new Error("missing image or scale in getHeightMap()");
-    }
-}
