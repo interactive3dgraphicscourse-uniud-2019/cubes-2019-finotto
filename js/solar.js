@@ -38,26 +38,26 @@ let sunMat2 = new THREE.MeshBasicMaterial({color:sunColor2,transparent:false,opa
  * Planet creations
  */
 let sun = new Planet(50,sunMat);
-let mercury = new Planet(10,mercuryMat);
-let venus = new Planet(13,venusMat);
-let mars = new Planet(15,marsMat);
-let earth = new Planet(16,earthMat);
-let moon = new Planet(5,moonMat);
+let mercury = new Planet(10,mercuryMat,2);
+let venus = new Planet(13,venusMat,2);
+let mars = new Planet(15,marsMat,2);
+let earth = new Planet(16,earthMat,2);
+let moon = new Planet(5,moonMat,1);
 
 let heightMap = new Image();
 heightMap.src="textures/world.jpg";
 heightMap.onload=()=>{
     //sun.generatePlanetSurface(heightMap,4,sunMat2);
-    mercury.generatePlanetSurface(heightMap,4,venusMat);
-    venus.generatePlanetSurface(heightMap,4,earthMat);
-    mars.generatePlanetSurface(heightMap,4,venusMat);
-    earth.generatePlanetSurface(heightMap,4,venusMat);
-    moon.generatePlanetSurface(heightMap,4,venusMat);
+    mercury.generatePlanetSurface(heightMap,2,venusMat);
+    venus.generatePlanetSurface(heightMap,2,earthMat);
+    mars.generatePlanetSurface(heightMap,2,venusMat);
+    earth.generatePlanetSurface(heightMap,2,venusMat);
+    moon.generatePlanetSurface(heightMap,5,venusMat);
 }
 let heightMap2 = new Image();
 heightMap2.src="textures/height2.jpg";
 heightMap2.onload=()=>{
-    sun.generatePlanetSurface(heightMap,4,sunMat2);
+    sun.generatePlanetSurface(heightMap,2,sunMat2);
     // mercury.generatePlanetSurface(heightMap,4,venusMat);
     // venus.generatePlanetSurface(heightMap,4,earthMat);
     // mars.generatePlanetSurface(heightMap,4,venusMat);
@@ -142,7 +142,7 @@ let clock = new THREE.Clock(true);
  */
 canvas.update=()=>{
     //controls.target = earth.planetObject.position;
-    controls.target = earth.planetObject.position;
+    controls.target = sun.planetObject.position;
     let sin = Math.sin(clock.getElapsedTime());
     //sun.planetObject.scale.set(sin+1.5,sin+1.5,sin+1.5);
      //  sun.surfaceObject.scale.set(Math.sin(clock.getElapsedTime())*0.1,Math.sin(clock.getElapsedTime()),Math.sin(clock.getElapsedTime()));

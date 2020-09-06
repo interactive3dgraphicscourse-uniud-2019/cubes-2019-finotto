@@ -5,10 +5,14 @@ export default class Planet {
      * @param {THREE.Material} material 
      * @param {number} diameter 
      */
-    constructor(diameter, material) {
+    constructor(diameter, material,boxSize) {
         this.material = material;
         this.diameter = diameter;
-        this.boxSize = diameter / 10;
+        if(boxSize){
+            this.boxSize = boxSize;
+        }else{
+            this.boxSize = diameter / 10;
+        }
         this.planetObject = new THREE.Object3D();
         this.surfaceObject = new THREE.Object3D();
         this.planetObject.add(this.surfaceObject);
@@ -71,9 +75,9 @@ export default class Planet {
         let mat = this.material;
         let cubes;
         let tempCubes = [];
-        for (let x = -this.diameter / 2; x <= this.diameter / 2; x += this.boxSize / 4) {
-            for (let y = -this.diameter / 2; y <= this.diameter / 2; y += this.boxSize / 4) {
-                for (let z = -this.diameter / 2; z <= this.diameter / 2; z += this.boxSize / 4) {
+        for (let x = -this.diameter / 2; x <= this.diameter / 2; x += this.boxSize/2 ) {
+            for (let y = -this.diameter / 2; y <= this.diameter / 2; y += this.boxSize/2 ) {
+                for (let z = -this.diameter / 2; z <= this.diameter / 2; z += this.boxSize/2 ) {
                     let pos = new THREE.Vector3(x, y, z);
                     if (pos.length() > (this.diameter / 2) - this.boxSize / 2 && pos.length() < (this.diameter / 2) + this.boxSize / 2) {
                         pos = this.__nearestSpawnPosition(pos, this.boxSize);
@@ -141,11 +145,12 @@ export default class Planet {
      * @returns {THREE.Vector3[]} 
      */
     __getFrustumCoords(direction, min, max, fov, boxSize) {
-        let size = boxSize/4;
+        let size = boxSize;
         let vDir = new THREE.Vector3(direction.x, direction.y, direction.z).normalize();
         let vMin = new THREE.Vector3(vDir.x, vDir.y, vDir.z).multiplyScalar(min);
         let vMax = vDir.multiplyScalar(max);
-        let delta = (max - min) / boxSize;
+
+        let delta = (max - min) / size;
         // // min splane
         // let vBTL = vMin.applyAxisAngle(new THREE.Vector3(-1, 1, 0), fov);
         // let vBTR = vMin.applyAxisAngle(new THREE.Vector3(1, 1, 0), fov);
@@ -157,7 +162,7 @@ export default class Planet {
         // let vFBR = vMax.applyAxisAngle(new THREE.Vector3(1, -1, 0), fov);
         // let vFBL = vMax.applyAxisAngle(new THREE.Vector3(-1, -1, 0), fov);
         let row = [];
-        for (let i = 1; i <= delta; i++) {
+        for (let i = 0; i <= delta; i++) {
             let step = new THREE.Vector3(vMin.x, vMin.y, vMin.z).normalize();
             step = step.multiplyScalar((size) * i);
             step = vMin.add(step);
@@ -188,6 +193,9 @@ export default class Planet {
         let posX = (Math.floor(position.x / size)) * size + (0.5 * size);
         let posY = (Math.floor(position.y / size)) * size + (0.5 * size);
         let posZ = (Math.floor(position.z / size)) * size + (0.5 * size);
+
+
+
         return new THREE.Vector3(posX, posY, posZ);
     }
 
@@ -199,12 +207,12 @@ export default class Planet {
      * @returns {THREE.BufferGeometry}
      */
     __generateBoxAtPosition(position, boxSize) {
-        let box = new THREE.BoxBufferGeometry(boxSize, boxSize, boxSize);
+        let box = new THREE.BoxBufferGeometry(boxSize,boxSize,boxSize);
         let mesh = new THREE.Mesh(box);
 
         mesh.scale.set(boxSize, boxSize, boxSize);
         mesh.translateOnAxis(position, position.length());
-
+        mesh.geometry.scale(boxSize,boxSize,boxSize)
         mesh.updateMatrix();
         mesh.geometry.applyMatrix4(mesh.matrix);
 
