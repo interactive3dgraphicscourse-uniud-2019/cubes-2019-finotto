@@ -71,13 +71,13 @@ export default class Planet {
         let mat = this.material;
         let cubes;
         let tempCubes = [];
-        for (let x = -this.diameter / 2; x <= this.diameter / 2; x += this.boxSize / 2) {
-            for (let y = -this.diameter / 2; y <= this.diameter / 2; y += this.boxSize / 2) {
-                for (let z = -this.diameter / 2; z <= this.diameter / 2; z += this.boxSize / 2) {
+        for (let x = -this.diameter / 2; x <= this.diameter / 2; x += this.boxSize / 4) {
+            for (let y = -this.diameter / 2; y <= this.diameter / 2; y += this.boxSize / 4) {
+                for (let z = -this.diameter / 2; z <= this.diameter / 2; z += this.boxSize / 4) {
                     let pos = new THREE.Vector3(x, y, z);
                     if (pos.length() > (this.diameter / 2) - this.boxSize / 2 && pos.length() < (this.diameter / 2) + this.boxSize / 2) {
-                        pos = this.__nearestSpawnPosition(pos, this.boxSize / 2);
-                        let newBox = this.__generateBoxAtPosition(pos, this.boxSize * 1.5);
+                        pos = this.__nearestSpawnPosition(pos, this.boxSize);
+                        let newBox = this.__generateBoxAtPosition(pos, this.boxSize);
                         tempCubes.push(newBox);
                     }
                 }
@@ -114,8 +114,8 @@ export default class Planet {
                         //     tempCubes.push(newBox);
                         // }
                         if(offset>0){
-                            for (const point of this.__getFrustumCoords(pos, this.diameter / 2, (this.diameter / 2) + offset, 75, this.boxSize)) {
-                                let newBox = this.__generateBoxAtPosition(point, this.boxSize * 1.5);
+                            for (const point of this.__getFrustumCoords(pos, this.diameter / 2, (this.diameter / 2) + (offset*(this.boxSize)), 75, this.boxSize)) {
+                                let newBox = this.__generateBoxAtPosition(point, this.boxSize);
                                 tempCubes.push(newBox);
                                 //cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, newBox]);
                             }
@@ -136,15 +136,16 @@ export default class Planet {
      * @param {THREE.Vector3} direction ray direction
      * @param {number} min ray min value
      * @param {number} max ray max value
-     * @param {number} blockSize blockSize
+     * @param {number} size blockSize
      * @param {number} fov blockSize
      * @returns {THREE.Vector3[]} 
      */
-    __getFrustumCoords(direction, min, max, fov, blockSize) {
+    __getFrustumCoords(direction, min, max, fov, boxSize) {
+        let size = boxSize/4;
         let vDir = new THREE.Vector3(direction.x, direction.y, direction.z).normalize();
         let vMin = new THREE.Vector3(vDir.x, vDir.y, vDir.z).multiplyScalar(min);
         let vMax = vDir.multiplyScalar(max);
-        let delta = (max - min) / blockSize;
+        let delta = (max - min) / boxSize;
         // // min splane
         // let vBTL = vMin.applyAxisAngle(new THREE.Vector3(-1, 1, 0), fov);
         // let vBTR = vMin.applyAxisAngle(new THREE.Vector3(1, 1, 0), fov);
@@ -158,12 +159,12 @@ export default class Planet {
         let row = [];
         for (let i = 1; i <= delta; i++) {
             let step = new THREE.Vector3(vMin.x, vMin.y, vMin.z).normalize();
-            step.multiplyScalar(blockSize * i);
+            step = step.multiplyScalar((size) * i);
             step = vMin.add(step);
-            step = this.__nearestSpawnPosition(step,blockSize);
+            step = this.__nearestSpawnPosition(step,boxSize);
             row.push(step);
         }
-        return [...row,vMax];//,vBTL,vBTR,vBBR,vBBL,vFTL,vFTR,vFBR,vFBL
+        return [...row];//,vBTL,vBTR,vBBR,vBBL,vFTL,vFTR,vFBR,vFBL
     }
     /**
      * 
@@ -182,7 +183,8 @@ export default class Planet {
      * @param {number} size 
      * @returns {THREE.Vector3} nearest spawn position
      */
-    __nearestSpawnPosition(position, size) {
+    __nearestSpawnPosition(position, boxSize) {
+        let size = boxSize/4;
         let posX = (Math.floor(position.x / size)) * size + (0.5 * size);
         let posY = (Math.floor(position.y / size)) * size + (0.5 * size);
         let posZ = (Math.floor(position.z / size)) * size + (0.5 * size);
@@ -203,8 +205,8 @@ export default class Planet {
         mesh.scale.set(boxSize, boxSize, boxSize);
         mesh.translateOnAxis(position, position.length());
 
-        mesh.updateMatrixWorld();
-        mesh.geometry.applyMatrix4(mesh.matrixWorld);
+        mesh.updateMatrix();
+        mesh.geometry.applyMatrix4(mesh.matrix);
 
         return mesh.geometry;
     }
