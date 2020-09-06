@@ -67,17 +67,17 @@ let mercury = new Planet(10,mercuryMat,2.5);
 let venus = new Planet(13,venusMat,3);
 let mars = new Planet(15,marsMat,3.5);
 let earth = new Planet(16,earthMat,4);
-let moon = new Planet(5,moonMat,2);
+let moon = new Planet(5,moonMat,1.5);
 
 let heightMap = new Image();
-heightMap.src="textures/world2.jpg";
+heightMap.src="textures/world.jpg";
 heightMap.onload=()=>{
     sun.generatePlanetSurface(heightMap,3,sunMat2);
-    mercury.generatePlanetSurface(heightMap,3,venusMat);
-    venus.generatePlanetSurface(heightMap,3,earthMat);
-    mars.generatePlanetSurface(heightMap,3,venusMat);
-    earth.generatePlanetSurface(heightMap,3,venusMat);
-    moon.generatePlanetSurface(heightMap,3,venusMat);
+    mercury.generatePlanetSurface(heightMap,2,venusMat);
+    venus.generatePlanetSurface(heightMap,2,earthMat);
+    mars.generatePlanetSurface(heightMap,2,venusMat);
+    earth.generatePlanetSurface(heightMap,2,venusMat);
+    moon.generatePlanetSurface(heightMap,2,venusMat);
 }
 // let heightMap2 = new Image();
 // heightMap2.src="textures/height2.jpg";
@@ -106,7 +106,7 @@ mercury.planetObject.position.set(0,0,1500);
 venus.planetObject.position.set(0,0,2000);
 mars.planetObject.position.set(0,0,3000);
 earth.planetObject.position.set(0,0,4000);
-moon.planetObject.position.set(0,0,200);
+moon.planetObject.position.set(0,0,500);
 
 /**
  * planets controller for animations
