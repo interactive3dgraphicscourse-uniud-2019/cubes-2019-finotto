@@ -142,20 +142,20 @@ let clock = new THREE.Clock(true);
  */
 canvas.update=()=>{
     //controls.target = earth.planetObject.position;
-    controls.target = sun.planetObject.position;
+    controls.target = earth.planetObject.position;
     let sin = Math.sin(clock.getElapsedTime());
     //sun.planetObject.scale.set(sin+1.5,sin+1.5,sin+1.5);
      //  sun.surfaceObject.scale.set(Math.sin(clock.getElapsedTime())*0.1,Math.sin(clock.getElapsedTime()),Math.sin(clock.getElapsedTime()));
      //  mercuryController.position.z = Math.sin(clock.getElapsedTime()*5)*100;
      // mesh2.position.y = -Math.sin(clock.getElapsedTime()+Math.PI/2);
 
-     sun.planetObject.rotateY(0.005);
-     //sun.surfaceObject.rotateY(-0.002);
-     mercuryController.rotateY(0.05);
-     venusController.rotateY(0.01);
-     marsController.rotateY(0.005);
-     earthController.rotateY(0.001);
-     earth.planetObject.rotateY(0.07)
+    //  sun.planetObject.rotateY(0.005);
+    //  //sun.surfaceObject.rotateY(-0.002);
+    //  mercuryController.rotateY(0.05);
+    //  venusController.rotateY(0.01);
+    //  marsController.rotateY(0.005);
+    //  earthController.rotateY(0.001);
+    //  earth.planetObject.rotateY(0.07)
 }
 
 canvas.renderLoop();

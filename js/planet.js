@@ -106,17 +106,18 @@ export default class Planet {
                         let uvCoord = this.__mapSphereCoordToMap(pos).multiply(new THREE.Vector2(heightMap.width, heightMap.height));
                         let colorChannels = canvasContext.getImageData(uvCoord.x, uvCoord.y, 1, 1).data;
                         let offset = Math.floor((colorChannels[0] / 255) * weight); // range 0-> weight
-                        for (let i = 1; i <= offset; i++) {
-                            pos.setLength(((this.diameter / 2)*1) + (i*this.boxSize/4));
-                            pos = this.__nearestSpawnPosition(pos, this.boxSize / 2);
-                            let newBox = this.__generateBoxAtPosition(pos, this.boxSize*1.5);
-                            //cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, newBox]);
-                            tempCubes.push(newBox);
-                        }
-                        // for (const point of this.__getFrustumCoords(pos,1,10,75,this.boxSize)) {
-                        //     let newBox = this.__generateBoxAtPosition(point, this.boxSize*1.5);
-                        //     cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, newBox]);
+                        // for (let i = 1; i <= offset; i++) {
+                        //     pos.setLength(((this.diameter / 2)*1) + (i*this.boxSize/4));
+                        //     pos = this.__nearestSpawnPosition(pos, this.boxSize / 2);
+                        //     let newBox = this.__generateBoxAtPosition(pos, this.boxSize*1.5);
+                        //     //cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, newBox]);
+                        //     tempCubes.push(newBox);
                         // }
+                        for (const point of this.__getFrustumCoords(pos,this.diameter/2,this.diameter/2+offset,75,this.boxSize)) {
+                            let newBox = this.__generateBoxAtPosition(point, this.boxSize*1.5);
+                            tempCubes.push(newBox);
+                            //cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, newBox]);
+                        }
                         
                     }
                 }
@@ -137,7 +138,6 @@ export default class Planet {
      * @returns {THREE.Vector3[]} 
      */
     __getFrustumCoords(direction,min,max,fov,blockSize) {
-        console.log("FRUSTM");
         let vDir = new THREE.Vector3(direction.x,direction.y,direction.z).normalize();
         let vMin = new THREE.Vector3(vDir.x,vDir.y,vDir.z).multiplyScalar(min);
         let vMax = vDir.multiplyScalar(max);
