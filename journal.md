@@ -12,6 +12,6 @@
 
 
 
-### programs
-# visual studio code
-# gimp textures
+# programs
+- visual studio code  
+- gimp textures  
