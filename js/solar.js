@@ -14,8 +14,9 @@ let target;
  */
 let animate;
 let gui = new dat.GUI();
-let toogleAnimation = {set:()=>{animate=!animate}}
 
+// dat gui objects
+let toogleAnimation = {set:()=>{animate=!animate}}
 let sunSetter= {set:()=>{target = sun.planetObject}}
 let mercurySetter= {set:()=>{target = mercury.planetObject}}
 let venusSetter= {set:()=>{target = venus.planetObject}}
@@ -62,32 +63,32 @@ let sunMat2 = new THREE.MeshBasicMaterial({color:sunColor2,transparent:false,opa
  * Planet creations
  */
 let sun = new Planet(50,sunMat);
-let mercury = new Planet(10,mercuryMat,2);
-let venus = new Planet(13,venusMat,2);
-let mars = new Planet(15,marsMat,2);
-let earth = new Planet(16,earthMat,2);
-let moon = new Planet(5,moonMat,1);
+let mercury = new Planet(10,mercuryMat,2.5);
+let venus = new Planet(13,venusMat,3);
+let mars = new Planet(15,marsMat,3.5);
+let earth = new Planet(16,earthMat,4);
+let moon = new Planet(5,moonMat,2);
 
 let heightMap = new Image();
-heightMap.src="textures/world.jpg";
+heightMap.src="textures/world2.jpg";
 heightMap.onload=()=>{
-    //sun.generatePlanetSurface(heightMap,4,sunMat2);
-    mercury.generatePlanetSurface(heightMap,2,venusMat);
-    venus.generatePlanetSurface(heightMap,2,earthMat);
-    mars.generatePlanetSurface(heightMap,2,venusMat);
-    earth.generatePlanetSurface(heightMap,2,venusMat);
-    moon.generatePlanetSurface(heightMap,5,venusMat);
+    sun.generatePlanetSurface(heightMap,3,sunMat2);
+    mercury.generatePlanetSurface(heightMap,3,venusMat);
+    venus.generatePlanetSurface(heightMap,3,earthMat);
+    mars.generatePlanetSurface(heightMap,3,venusMat);
+    earth.generatePlanetSurface(heightMap,3,venusMat);
+    moon.generatePlanetSurface(heightMap,3,venusMat);
 }
-let heightMap2 = new Image();
-heightMap2.src="textures/height2.jpg";
-heightMap2.onload=()=>{
-    sun.generatePlanetSurface(heightMap,2,sunMat2);
-    // mercury.generatePlanetSurface(heightMap,4,venusMat);
-    // venus.generatePlanetSurface(heightMap,4,earthMat);
-    // mars.generatePlanetSurface(heightMap,4,venusMat);
-    // earth.generatePlanetSurface(heightMap,4,venusMat);
-    // moon.generatePlanetSurface(heightMap,4,venusMat);
-}
+// let heightMap2 = new Image();
+// heightMap2.src="textures/height2.jpg";
+// heightMap2.onload=()=>{
+//     sun.generatePlanetSurface(heightMap,2,sunMat2);
+//     // mercury.generatePlanetSurface(heightMap,4,venusMat);
+//     // venus.generatePlanetSurface(heightMap,4,earthMat);
+//     // mars.generatePlanetSurface(heightMap,4,venusMat);
+//     // earth.generatePlanetSurface(heightMap,4,venusMat);
+//     // moon.generatePlanetSurface(heightMap,4,venusMat);
+// }
 
 
 
@@ -101,7 +102,7 @@ moon.generatePlanet();
 
 
 sun.planetObject.position.set(0,0,0);
-mercury.planetObject.position.set(0,0,1000);
+mercury.planetObject.position.set(0,0,1500);
 venus.planetObject.position.set(0,0,2000);
 mars.planetObject.position.set(0,0,3000);
 earth.planetObject.position.set(0,0,4000);
