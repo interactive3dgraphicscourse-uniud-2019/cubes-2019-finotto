@@ -6,7 +6,7 @@ import Planet from './planet.js';
 let canvas = new CanvasHandler("body");
 let controls = new THREE.OrbitControls(canvas.camera, canvas.renderer.domElement);
 /**
- * @type {THREE.Mesh} target
+ * @type {Planet} target
  */
 let target;
 /**
@@ -17,12 +17,24 @@ let gui = new dat.GUI();
 
 // dat gui objects
 let toogleAnimation = {set:()=>{animate=!animate}}
-let sunSetter= {set:()=>{target = sun.planetObject}}
-let mercurySetter= {set:()=>{target = mercury.planetObject}}
-let venusSetter= {set:()=>{target = venus.planetObject}}
-let marsSetter= {set:()=>{target = mars.planetObject}}
-let earthSetter= {set:()=>{target = earth.planetObject}}
-let moonSetter= {set:()=>{target = moon.planetObject}}
+let sunSetter= {set:()=>{target = sun}}
+let mercurySetter= {set:()=>{target = mercury}}
+let venusSetter= {set:()=>{target = venus}}
+let marsSetter= {set:()=>{target = mars}}
+let earthSetter= {set:()=>{target = earth}}
+let moonSetter= {set:()=>{target = moon}}
+let targetSurface = {
+    __weight: 1,
+    set weight(value){
+        this.__weight=value;
+        target.planetObject.remove(target.surfaceObject);
+        target.surfaceObject = new THREE.Object3D(); 
+        target.generatePlanetSurface(heightMap,value,target.surfaceMaterial);
+    },
+    get weight(){
+        return this.__weight; 
+    }
+}
 
 gui.add(toogleAnimation,"set").name("Toogle Animation");
 gui.add(sunSetter,"set").name("Sun");
@@ -31,6 +43,7 @@ gui.add(venusSetter,"set").name("Venus");
 gui.add(marsSetter,"set").name("Mars");
 gui.add(earthSetter,"set").name("Earth");
 gui.add(moonSetter,"set").name("Moon");
+gui.add(targetSurface,"weight",1,8,1).name("Change surface");
 /**
  * definitions of colors
  */
@@ -62,12 +75,12 @@ let sunMat2 = new THREE.MeshBasicMaterial({color:sunColor2,transparent:false,opa
 /**
  * Planet creations
  */
-let sun = new Planet(50,sunMat);
-let mercury = new Planet(10,mercuryMat,2.5);
-let venus = new Planet(13,venusMat,3);
-let mars = new Planet(15,marsMat,3.5);
-let earth = new Planet(16,earthMat,4);
-let moon = new Planet(5,moonMat,1.5);
+let sun = new Planet(50,sunMat,5,sunMat2);
+let mercury = new Planet(10,mercuryMat,2.5,venusMat);
+let venus = new Planet(13,venusMat,3,earthMat);
+let mars = new Planet(15,marsMat,3.5,venusMat);
+let earth = new Planet(16,earthMat,4,venusMat);
+let moon = new Planet(5,moonMat,1.5,venusMat);
 
 let heightMap = new Image();
 heightMap.src="textures/world.jpg";
@@ -159,14 +172,14 @@ canvas.renderer.setClearColor(bgColor,1);
 canvas.scene.background = new THREE.CubeTextureLoader().setPath("textures/cubemaps/")
                 .load(['box.jpg','box.jpg','box.jpg','box.jpg','box.jpg','box.jpg']);
 
-target = sun.planetObject;
+target = sun;
 let clock = new THREE.Clock(true);
 
 /**
  * Function of update of my scene
  */
 canvas.update=()=>{
-    controls.target = target.getWorldPosition();
+    controls.target = target.planetObject.getWorldPosition();
 
     if(animate){
         let sin = Math.sin(clock.getElapsedTime());   

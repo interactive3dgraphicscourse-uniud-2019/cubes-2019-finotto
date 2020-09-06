@@ -5,9 +5,10 @@ export default class Planet {
      * @param {THREE.Material} material 
      * @param {number} diameter 
      */
-    constructor(diameter, material,boxSize) {
+    constructor(diameter, material,boxSize,surfaceMaterial) {
         this.material = material;
         this.diameter = diameter;
+        this.surfaceMaterial=surfaceMaterial;
         if(boxSize){
             this.boxSize = boxSize;
         }else{
