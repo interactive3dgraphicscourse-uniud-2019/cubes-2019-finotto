@@ -19,58 +19,58 @@ export default class Planet {
  * @param {number} weight;
  * @param {THREE.Material} material2;
  */
-    generateSurface(heightMap, weight, material2) {
+    // generateSurface(heightMap, weight, material2) {
 
-        let canvasContext = this.__getHeightMapDataContext(heightMap)
-        /**
-         * @type {THREE.Geometry}
-         */
-        let cubes = new THREE.BoxBufferGeometry();
-        for (let x = -this.diameter / 2; x <= this.diameter / 2; x++) {
-            for (let y = -this.diameter / 2; y <= this.diameter / 2; y++) {
-                for (let z = -this.diameter / 2; z <= this.diameter / 2; z++) {
-                    if (Math.floor(new THREE.Vector3(x, y, z).length() + (this.diameter * 0.8)) <= this.diameter && (Math.floor(new THREE.Vector3(x, y, z).length() + (this.diameter * 0.8)) + 1) >= this.diameter) {
-                        let geometry = new THREE.BoxBufferGeometry(this.boxSize, this.boxSize, this.boxSize);
-                        let u = (0.5 - Math.atan2((z * 2) / (this.diameter), (x * 2) / (this.diameter)) / Math.PI / 2) * heightMap.width;
-                        let v = (0.5 - 2 * Math.asin((y * 2 / (this.diameter))) / Math.PI / 2) * heightMap.height;
+    //     let canvasContext = this.__getHeightMapDataContext(heightMap)
+    //     /**
+    //      * @type {THREE.Geometry}
+    //      */
+    //     let cubes = new THREE.BoxBufferGeometry();
+    //     for (let x = -this.diameter / 2; x <= this.diameter / 2; x++) {
+    //         for (let y = -this.diameter / 2; y <= this.diameter / 2; y++) {
+    //             for (let z = -this.diameter / 2; z <= this.diameter / 2; z++) {
+    //                 if (Math.floor(new THREE.Vector3(x, y, z).length() + (this.diameter * 0.8)) <= this.diameter && (Math.floor(new THREE.Vector3(x, y, z).length() + (this.diameter * 0.8)) + 1) >= this.diameter) {
+    //                     let geometry = new THREE.BoxBufferGeometry(this.boxSize, this.boxSize, this.boxSize);
+    //                     let u = (0.5 - Math.atan2((z * 2) / (this.diameter), (x * 2) / (this.diameter)) / Math.PI / 2) * heightMap.width;
+    //                     let v = (0.5 - 2 * Math.asin((y * 2 / (this.diameter))) / Math.PI / 2) * heightMap.height;
 
-                        let colorChannels = canvasContext.getImageData(u, v, 1, 1).data;
-                        let offset = Math.floor(((colorChannels[0] / 255)) * this.boxSize * weight);
+    //                     let colorChannels = canvasContext.getImageData(u, v, 1, 1).data;
+    //                     let offset = Math.floor(((colorChannels[0] / 255)) * this.boxSize * weight);
 
-                        let mesh;
-                        let direction;
+    //                     let mesh;
+    //                     let direction;
 
-                        for (let i = 1; i <= offset; i++) {
-                            mesh = new THREE.Mesh(geometry, material2);
-                            let dir = new THREE.Vector3(x, y, z).normalize();
-                            dir = dir.multiplyScalar(i * this.boxSize);
-                            direction = new THREE.Vector3((x), (y), (z)).add(dir);
-                            mesh.position.set(Math.floor(direction.x), Math.floor(direction.y), Math.floor(direction.z));
-                            //mesh.updateWorldMatrix();
-                            mesh.updateMatrix();
-                            mesh.geometry.applyMatrix4(mesh.matrix);
-                            cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, mesh.geometry]);
-                            //cubes.mergeMesh(mesh);
-                        }
-                        //mesh.position.add(new THREE.Vector3(-offset/2,-offset/2,-offset/2));
-                    }
-                    continue;
-                }
-            }
-        }
-        this.surfaceObject = new THREE.Mesh(cubes, material2);
-        this.planetObject.add(this.surfaceObject);
-        // let merged = THREE.BufferGeometryUtils.mergeBufferGeometries(cubes.map(x=>x.geometry));
-        // this.surfaceObject.add(merged);
-    }
+    //                     for (let i = 1; i <= offset; i++) {
+    //                         mesh = new THREE.Mesh(geometry, material2);
+    //                         let dir = new THREE.Vector3(x, y, z).normalize();
+    //                         dir = dir.multiplyScalar(i * this.boxSize);
+    //                         direction = new THREE.Vector3((x), (y), (z)).add(dir);
+    //                         mesh.position.set(Math.floor(direction.x), Math.floor(direction.y), Math.floor(direction.z));
+    //                         //mesh.updateWorldMatrix();
+    //                         mesh.updateMatrix();
+    //                         mesh.geometry.applyMatrix4(mesh.matrix);
+    //                         cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, mesh.geometry]);
+    //                         //cubes.mergeMesh(mesh);
+    //                     }
+    //                     //mesh.position.add(new THREE.Vector3(-offset/2,-offset/2,-offset/2));
+    //                 }
+    //                 continue;
+    //             }
+    //         }
+    //     }
+    //     this.surfaceObject = new THREE.Mesh(cubes, material2);
+    //     this.planetObject.add(this.surfaceObject);
+    //     // let merged = THREE.BufferGeometryUtils.mergeBufferGeometries(cubes.map(x=>x.geometry));
+    //     // this.surfaceObject.add(merged);
+    // }
 
     /**
      * new one
      */
     async generatePlanet() {
         let mat = this.material;
-        let cubes = new THREE.BoxBufferGeometry();
-
+        let cubes;
+        let tempCubes=[];
         for (let x = -this.diameter / 2; x <= this.diameter / 2; x += this.boxSize / 2) {
             for (let y = -this.diameter / 2; y <= this.diameter / 2; y += this.boxSize / 2) {
                 for (let z = -this.diameter / 2; z <= this.diameter / 2; z += this.boxSize / 2) {
@@ -78,12 +78,12 @@ export default class Planet {
                     if (pos.length() > (this.diameter/2 )-this.boxSize/2 && pos.length() < (this.diameter/2 )+this.boxSize/2) {
                         pos = this.__nearestSpawnPosition(pos, this.boxSize / 2);
                         let newBox = this.__generateBoxAtPosition(pos, this.boxSize * 1.5);
-                        cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, newBox]);
+                        tempCubes.push(newBox);
                     }
                 }
             }
         }
-
+        cubes = THREE.BufferGeometryUtils.mergeBufferGeometries(tempCubes);
         this.planetObject.add(new THREE.Mesh(cubes, this.material));
     }
     /**
@@ -94,7 +94,8 @@ export default class Planet {
      */
     async generatePlanetSurface(heightMap, weight, material) {
         //this.boxSize =8;
-        let cubes = new THREE.BoxBufferGeometry();
+        let cubes;
+        let tempCubes=[];
         let canvasContext = this.__getHeightMapDataContext(heightMap);
         for (let x = -this.diameter / 2; x <= this.diameter / 2; x += this.boxSize / 2) {
             for (let y = -this.diameter / 2; y <= this.diameter / 2; y += this.boxSize / 2) {
@@ -109,7 +110,8 @@ export default class Planet {
                             pos.setLength(((this.diameter / 2)*1) + (i*this.boxSize/4));
                             pos = this.__nearestSpawnPosition(pos, this.boxSize / 2);
                             let newBox = this.__generateBoxAtPosition(pos, this.boxSize*1.5);
-                            cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, newBox]);
+                            //cubes = THREE.BufferGeometryUtils.mergeBufferGeometries([cubes, newBox]);
+                            tempCubes.push(newBox);
                         }
                         // for (const point of this.__getFrustumCoords(pos,1,10,75,this.boxSize)) {
                         //     let newBox = this.__generateBoxAtPosition(point, this.boxSize*1.5);
@@ -120,6 +122,7 @@ export default class Planet {
                 }
             }
         }
+        cubes = THREE.BufferGeometryUtils.mergeBufferGeometries(tempCubes);
         this.surfaceObject.add(new THREE.Mesh(cubes, material));
         this.planetObject.add(this.surfaceObject);
     }
