@@ -5,7 +5,31 @@ import Planet from './planet.js';
  */
 let canvas = new CanvasHandler("body");
 let controls = new THREE.OrbitControls(canvas.camera, canvas.renderer.domElement);
+/**
+ * @type {THREE.Mesh} target
+ */
+let target;
+/**
+ * @type {boolean}
+ */
+let animate;
+let gui = new dat.GUI();
+let toogleAnimation = {set:()=>{animate=!animate}}
 
+let sunSetter= {set:()=>{target = sun.planetObject}}
+let mercurySetter= {set:()=>{target = mercury.planetObject}}
+let venusSetter= {set:()=>{target = venus.planetObject}}
+let marsSetter= {set:()=>{target = mars.planetObject}}
+let earthSetter= {set:()=>{target = earth.planetObject}}
+let moonSetter= {set:()=>{target = moon.planetObject}}
+
+gui.add(toogleAnimation,"set").name("Toogle Animation");
+gui.add(sunSetter,"set").name("Sun");
+gui.add(mercurySetter,"set").name("Mercury");
+gui.add(venusSetter,"set").name("Venus");
+gui.add(marsSetter,"set").name("Mars");
+gui.add(earthSetter,"set").name("Earth");
+gui.add(moonSetter,"set").name("Moon");
 /**
  * definitions of colors
  */
@@ -134,28 +158,24 @@ canvas.renderer.setClearColor(bgColor,1);
 canvas.scene.background = new THREE.CubeTextureLoader().setPath("textures/cubemaps/")
                 .load(['box.jpg','box.jpg','box.jpg','box.jpg','box.jpg','box.jpg']);
 
-
+target = sun.planetObject;
 let clock = new THREE.Clock(true);
 
 /**
  * Function of update of my scene
  */
 canvas.update=()=>{
-    //controls.target = earth.planetObject.position;
-    controls.target = sun.planetObject.position;
-    let sin = Math.sin(clock.getElapsedTime());
-    //sun.planetObject.scale.set(sin+1.5,sin+1.5,sin+1.5);
-     //  sun.surfaceObject.scale.set(Math.sin(clock.getElapsedTime())*0.1,Math.sin(clock.getElapsedTime()),Math.sin(clock.getElapsedTime()));
-     //  mercuryController.position.z = Math.sin(clock.getElapsedTime()*5)*100;
-     // mesh2.position.y = -Math.sin(clock.getElapsedTime()+Math.PI/2);
+    controls.target = target.getWorldPosition();
 
-    //  sun.planetObject.rotateY(0.005);
-    //  //sun.surfaceObject.rotateY(-0.002);
-    //  mercuryController.rotateY(0.05);
-    //  venusController.rotateY(0.01);
-    //  marsController.rotateY(0.005);
-    //  earthController.rotateY(0.001);
-    //  earth.planetObject.rotateY(0.07)
+    if(animate){
+        let sin = Math.sin(clock.getElapsedTime());   
+        sun.planetObject.rotateY(0.005);
+        mercuryController.rotateY(0.05);
+        venusController.rotateY(0.01);
+        marsController.rotateY(0.005);
+        earthController.rotateY(0.001);
+        earth.planetObject.rotateY(0.07)
+    }
 }
 
 canvas.renderLoop();
