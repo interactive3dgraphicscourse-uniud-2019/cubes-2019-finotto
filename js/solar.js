@@ -43,7 +43,7 @@ gui.add(venusSetter,"set").name("Venus");
 gui.add(marsSetter,"set").name("Mars");
 gui.add(earthSetter,"set").name("Earth");
 gui.add(moonSetter,"set").name("Moon");
-gui.add(targetSurface,"weight",1,8,1).name("Change surface");
+gui.add(targetSurface,"weight",1,4,0.5).name("Change surface");
 /**
  * definitions of colors
  */
