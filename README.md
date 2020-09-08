@@ -9,3 +9,8 @@ Si può vedere i pianeti orbitare intorno al sole.
 - Toogle animation: permette di eseguire o fermale l'animazione dei pianeti
 - i nomi dei corpi celesti: lo imposta come target della telecamera (orbit controller) e del comando "change surface"
 - change surface: permette di ricalcolare la superficie del pianeta cambiando il raggio massimo di creazione dei cubi.
+## Generazione della scena
+la scena è completamente generata via codice partendo da dei parametri ed usando le texture per le superfici dei pianeti e la cubemap.
+## Programmi utilizzati
+- vscode 
+- gimp
