@@ -1,4 +1,4 @@
-export var cubecount=0;
+let cubecount=0;
 export default class Planet {
 
     /**
@@ -151,6 +151,7 @@ export default class Planet {
         mesh.updateMatrix();
         mesh.geometry.applyMatrix4(mesh.matrix);
         cubecount++;
+        console.log(cubecount);
         return mesh.geometry;
     }
     /**

@@ -1,5 +1,5 @@
 
-import Planet, { cubecount } from './planet.js';
+import Planet from './planet.js';
 /**
  * Basic setup
  */
@@ -175,7 +175,6 @@ canvas.scene.background = new THREE.CubeTextureLoader().setPath("textures/cubema
 
 target = sun;
 let clock = new THREE.Clock(true);
-console.log("cube count"+cubecount);
 /**
  * Function of update of my scene
  */
