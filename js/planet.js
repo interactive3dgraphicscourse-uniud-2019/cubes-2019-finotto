@@ -74,9 +74,11 @@ export default class Planet {
                 }
             }
         }
-        cubes = THREE.BufferGeometryUtils.mergeBufferGeometries(tempCubes);
-        this.surfaceObject.add(new THREE.Mesh(cubes, material));
-        this.planetObject.add(this.surfaceObject);
+        if(tempCubes){
+            cubes = THREE.BufferGeometryUtils.mergeBufferGeometries(tempCubes);
+            this.surfaceObject.add(new THREE.Mesh(cubes, material));
+            this.planetObject.add(this.surfaceObject);
+        }
     }
 
     /**
