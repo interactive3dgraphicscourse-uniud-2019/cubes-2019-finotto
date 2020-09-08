@@ -25,7 +25,6 @@ class CanvasHandler{
      * @param {string} selector id of element to use as canvas 
      */
     constructor(selector){
-        console.log("ctor canvas");
         this.setup(selector);
         window.addEventListener('resize',this.resize,false);
     }
@@ -34,7 +33,6 @@ class CanvasHandler{
      * @param {string} elementId 
      */
     setup(elementId){
-        console.log("setup");
         if(this.bindCanvasElement(elementId)){
             this.createScene();
             this.createCamera();
@@ -46,9 +44,7 @@ class CanvasHandler{
     }
     bindCanvasElement(elementId){
         if(elementId){
-            console.log(elementId);
             this.canvasElement = document.querySelector(elementId);
-            console.log(this.canvasElement);
             if(!this.canvasElement){
                 return false;
             }

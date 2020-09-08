@@ -59,9 +59,7 @@ function generateTerrain() {
     let imgSize = img.width * img.height;
     let data = new Float32Array(imgSize);
     context.drawImage(heightMap, 0, 0);
-    console.log(context);
     let imgData = context.getImageData(0, 0, img.width, img.height);
-    console.log(imgData);
     for (let i = 0, j = 0; i < imgData.data.length; i += 4) {
         let all = imgData.data[i] + imgData.data[i + 1] + imgData.data[i + 2];
         data[j++] = all;
@@ -70,7 +68,6 @@ function generateTerrain() {
             for (let y = 0; y < Math.floor((3 * all) % 5); y++) {
                 let mesh = new THREE.Mesh(geo, mat);
                 let x = j % img.width;
-                console.log(all);
                 let z = j / img.width;
                 mesh.position.set(x, y, z);
                 canvas.scene.add(mesh);

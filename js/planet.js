@@ -1,3 +1,4 @@
+export var cubecount=0;
 export default class Planet {
 
     /**
@@ -59,11 +60,7 @@ export default class Planet {
 
                         let uvCoord = this.__mapSphereCoordToMap(pos).multiply(new THREE.Vector2(heightMap.width, heightMap.height));
                         let colorChannels = canvasContext.getImageData(uvCoord.x, uvCoord.y, 1, 1).data;
-                        let offset = Math.floor((colorChannels[0] / 255) * weight); // range 0-> weight
-                        if(offset>3){
-                            console.log("BRAKKEPOINT");
-                        }
-                        
+                        let offset = Math.floor((colorChannels[0] / 255) * weight); // range 0-> weight                   
                         if(offset>0){
                             for (const point of this.__getRangeCoords(pos, this.diameter / 2, (this.diameter / 2) + (offset*(this.boxSize/2)), 75, this.boxSize)) {
                                 let newBox = this.__generateBoxAtPosition(point, this.boxSize);
@@ -153,7 +150,7 @@ export default class Planet {
         mesh.geometry.scale(boxSize,boxSize,boxSize)
         mesh.updateMatrix();
         mesh.geometry.applyMatrix4(mesh.matrix);
-
+        cubecount++;
         return mesh.geometry;
     }
     /**
